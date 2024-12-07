@@ -30,21 +30,27 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Line Selection
 	ON_UPDATE_COMMAND_UI(ID_LINE, &CCrisPaintView::OnUpdateLine)
 	ON_COMMAND(ID_LINE, &CCrisPaintView::OnLine)
+
 	// Circle Selection
 	ON_UPDATE_COMMAND_UI(ID_CIRCLE, &CCrisPaintView::OnUpdateCicle)
 	ON_COMMAND(ID_CIRCLE, &CCrisPaintView::OnCircle)
+
 	// Curve Selection
 	ON_UPDATE_COMMAND_UI(ID_CURVE, &CCrisPaintView::OnUpdateCurve)
 	ON_COMMAND(ID_CURVE, &CCrisPaintView::OnCurve)
+	
 	// Triangle Selection
 	ON_UPDATE_COMMAND_UI(ID_TRIANGLE, &CCrisPaintView::OnUpdateTriangle)
 	ON_COMMAND(ID_TRIANGLE, &CCrisPaintView::OnTriangle)
+
 	// Square Selection
 	ON_UPDATE_COMMAND_UI(ID_SQUARE, &CCrisPaintView::OnUpdateSquare)
 	ON_COMMAND(ID_SQUARE, &CCrisPaintView::OnSquare)
+
 	// Elipse Selection
 	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateElipse)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnElipse)
+
 	ON_WM_RBUTTONUP()
 END_MESSAGE_MAP()
 
