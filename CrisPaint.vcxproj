@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCircle.h" />
     <ClInclude Include="CCurve.h" />
     <ClInclude Include="CElipse.h" />
     <ClInclude Include="CLine.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="CTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCircle.cpp" />
     <ClCompile Include="CCurve.cpp" />
     <ClCompile Include="CElipse.cpp" />
     <ClCompile Include="CLine.cpp" />
