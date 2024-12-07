@@ -28,6 +28,8 @@ IMPLEMENT_DYNCREATE(CCrisPaintView, CView)
 
 BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_WM_CONTEXTMENU()
+	ON_WM_MOUSEMOVE()
+
 	// Line Selection
 	ON_UPDATE_COMMAND_UI(ID_LINE, &CCrisPaintView::OnUpdateLine)
 	ON_COMMAND(ID_LINE, &CCrisPaintView::OnLine)
@@ -86,8 +88,6 @@ void CCrisPaintView::OnDraw(CDC* /*pDC*/)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
-
 }
 
 void CCrisPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -154,21 +154,97 @@ void CCrisPaintView::OnCurve()
 	m = m == CURVE_SELECTED ? NOTHING_SELECTED : CURVE_SELECTED;
 }
 
-void CCrisPaintView::OnSquare()
+void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	m = m == SQUARE_SELECTED ? NOTHING_SELECTED : SQUARE_SELECTED;
+	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
+	CString s;
+	s.Format(L"%d, %d", point.x, point.y);
+	pMainFrame->setStatusBar(s);
+
+	CView::OnMouseMove(nFlags, point);
 }
 
-void CCrisPaintView::OnTriangle()
+void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
-	m = m == TRIANGLE_SELECTED ? NOTHING_SELECTED : TRIANGLE_SELECTED;
+#ifndef SHARED_HANDLERS
+	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
+#endif
 }
 
-void CCrisPaintView::OnElipse()
-{
-	m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
-}
+#pragma region Primitives
 
+	// Line
+	void CCrisPaintView::OnUpdateLine(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == LINE_SELECTED);
+	}
+
+	void CCrisPaintView::OnLine()
+	{
+		m = m == LINE_SELECTED ? NOTHING_SELECTED : LINE_SELECTED;
+	}
+
+	// Circle
+	void CCrisPaintView::OnUpdateCicle(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == CIRCLE_SELECTED);
+	}
+
+	void CCrisPaintView::OnCircle()
+	{
+		m = m == CIRCLE_SELECTED ? NOTHING_SELECTED : CIRCLE_SELECTED;
+	}
+
+	// Curve
+	void CCrisPaintView::OnUpdateCurve(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == CURVE_SELECTED);
+	}
+
+	void CCrisPaintView::OnCurve()
+	{
+		m = m == CURVE_SELECTED ? NOTHING_SELECTED : CURVE_SELECTED;
+	}
+
+	// Square
+	void CCrisPaintView::OnUpdateSquare(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == SQUARE_SELECTED);
+	}
+
+	void CCrisPaintView::OnSquare()
+	{
+		m = m == SQUARE_SELECTED ? NOTHING_SELECTED : SQUARE_SELECTED;
+	}
+
+	// Triangle
+	void CCrisPaintView::OnUpdateTriangle(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == TRIANGLE_SELECTED);
+	}
+
+	void CCrisPaintView::OnTriangle()
+	{
+		m = m == TRIANGLE_SELECTED ? NOTHING_SELECTED : TRIANGLE_SELECTED;
+	}
+
+	// Elipse
+	void CCrisPaintView::OnUpdateElipse(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == ELIPSE_SELECTED);
+	}
+
+	void CCrisPaintView::OnElipse()
+	{
+		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
+	}
+#pragma endregion
 
 // CCrisPaintView diagnostics
 
