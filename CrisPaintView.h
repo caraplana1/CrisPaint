@@ -1,4 +1,3 @@
-
 // CrisPaintView.h : interface of the CCrisPaintView class
 //
 
@@ -13,18 +12,6 @@ protected: // create from serialization only
 // Attributes
 public:
 	CCrisPaintDoc* GetDocument() const;
-	enum Primitive_Selection
-	{
-		NOTHING_SELECTED,
-		LINE_SELECTED,
-		CIRCLE_SELECTED,
-		CURVE_SELECTED,
-		SQUARE_SELECTED,
-		TRIANGLE_SELECTED,
-		ELIPSE_SELECTED
-	};
-
-	Primitive_Selection m;
 
 // Operations
 public:
