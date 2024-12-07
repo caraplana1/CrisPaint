@@ -6,6 +6,7 @@
 #pragma once
 #include <vector>
 #include "CShape.h"
+#include "CLine.h"
 
 
 class CCrisPaintDoc : public CDocument

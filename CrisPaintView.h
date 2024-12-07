@@ -27,6 +27,8 @@ public:
 
 // Operations
 public:
+	void DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 // Overrides
 public:
@@ -47,10 +49,6 @@ protected:
 // Generated message map functions
 protected:
 	afx_msg void OnFilePrintPreview();
-	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
@@ -68,6 +66,10 @@ public:
 	afx_msg void OnTriangle();
 	afx_msg void OnElipse();
 
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in CrisPaintView.cpp

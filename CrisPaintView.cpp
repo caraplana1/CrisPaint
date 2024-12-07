@@ -15,6 +15,11 @@
 #include "CrisPaintDoc.h"
 #include "CrisPaintView.h"
 #include "CShape.h"
+#include "CLine.h"
+#include "CCircle.h"
+#include "CRectangle.h"
+#include "CCurve.h"
+#include "CElipse.h"
 #include <vector>
 
 #ifdef _DEBUG
@@ -27,9 +32,12 @@
 IMPLEMENT_DYNCREATE(CCrisPaintView, CView)
 
 BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
+	// Button and mouse
 	ON_WM_CONTEXTMENU()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONUP()
 
 	// Line Selection
 	ON_UPDATE_COMMAND_UI(ID_LINE, &CCrisPaintView::OnUpdateLine)
@@ -54,20 +62,14 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Elipse Selection
 	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateElipse)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnElipse)
-
-	ON_WM_RBUTTONUP()
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
-
-// List of shapes to draw in orden.
-std::vector<CShape> shapes; 
 
 CCrisPaintView::CCrisPaintView() noexcept
 {
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
-	// shapes = {};
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -84,29 +86,94 @@ BOOL CCrisPaintView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CCrisPaintView drawing
 
-void CCrisPaintView::OnDraw(CDC* /*pDC*/)
+void CCrisPaintView::OnDraw(CDC* pDC)
 {
 	CCrisPaintDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+
+	CShape* aux;
+
+	for (int i = 0; i < pDoc->shapes.size(); i++)
+	{
+		aux = pDoc->shapes[i];
+		aux->render(pDC);
+	}
+
 }
 
-void CCrisPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
+void CCrisPaintView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	ClientToScreen(&point);
 	OnContextMenu(this, point);
+	CView::OnRButtonUp(nFlags, point);
 }
 
 void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	CCrisPaintDoc* pdoc = GetDocument();
+	ASSERT_VALID(pdoc);
+	if (!pdoc)
+		return;
+
+	if (pdoc->shapes.size() == 0)
+		return;
+
+	switch (m)
+	{
+	case CCrisPaintView::NOTHING_SELECTED:
+		break;
+	case CCrisPaintView::LINE_SELECTED:
+		EndDrawLine(nFlags, point, pdoc);
+		break;
+	case CCrisPaintView::CIRCLE_SELECTED:
+		break;
+	case CCrisPaintView::CURVE_SELECTED:
+		break;
+	case CCrisPaintView::SQUARE_SELECTED:
+		break;
+	case CCrisPaintView::TRIANGLE_SELECTED:
+		break;
+	case CCrisPaintView::ELIPSE_SELECTED:
+		break;
+	default:
+		break;
+	}
+
 	ClientToScreen(&point);
-	OnContextMenu(this, point);
+	CView::OnLButtonUp(nFlags, point);
 }
 
 void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	std::cout << "Mariquito\n";
+	CCrisPaintDoc* pdoc = GetDocument();
+	ASSERT_VALID(pdoc);
+	if (!pdoc)
+		return;
+
+
+	switch (m)
+	{
+	case CCrisPaintView::NOTHING_SELECTED:
+		break;
+	case CCrisPaintView::LINE_SELECTED:
+		DrawLine(nFlags, point, pdoc);
+		break;
+	case CCrisPaintView::CIRCLE_SELECTED:
+		break;
+	case CCrisPaintView::CURVE_SELECTED:
+		break;
+	case CCrisPaintView::SQUARE_SELECTED:
+		break;
+	case CCrisPaintView::TRIANGLE_SELECTED:
+		break;
+	case CCrisPaintView::ELIPSE_SELECTED:
+		break;
+	}
+
+	ClientToScreen(&point);
+	CView::OnLButtonDown(nFlags, point);
 }
 
 void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
@@ -126,7 +193,25 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #endif
 }
 
-#pragma region Primitives
+#pragma region Primitives Drawing
+
+void CCrisPaintView::DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+{
+	pDoc->shapes.push_back((CShape*)(new CLine(point.x, point.y, point.x, point.y)));
+}
+
+void CCrisPaintView::EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+{
+	int pos = pDoc->shapes.size() - 1;
+	CLine* line = (CLine*)pDoc->shapes[pos];
+	line->setEnd(point.x, point.y);
+	Invalidate(1);
+}
+
+#pragma endregion
+
+
+#pragma region Primitives Selection Menu
 
 	// Line
 	void CCrisPaintView::OnUpdateLine(CCmdUI* pCmdUI)

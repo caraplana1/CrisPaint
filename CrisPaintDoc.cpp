@@ -37,7 +37,7 @@ CCrisPaintDoc::CCrisPaintDoc() noexcept
 CCrisPaintDoc::~CCrisPaintDoc()
 {
 	for (int i = 0; i < shapes.size(); i++)
-		delete[] shapes[i];
+		delete shapes[i];
 }
 
 BOOL CCrisPaintDoc::OnNewDocument()
