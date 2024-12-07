@@ -14,7 +14,6 @@
 
 #include "CrisPaintDoc.h"
 #include "CrisPaintView.h"
-#include "CTypes.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -11,6 +11,18 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	enum Primitive_Selection
+	{
+		NOTHING_SELECTED,
+		LINE_SELECTED,
+		CIRCLE_SELECTED,
+		CURVE_SELECTED,
+		SQUARE_SELECTED,
+		TRIANGLE_SELECTED,
+		ELIPSE_SELECTED
+	};
+
+	Primitive_Selection m;
 	CCrisPaintDoc* GetDocument() const;
 
 // Operations
