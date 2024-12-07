@@ -5,7 +5,9 @@ class CLine : CShape
 {
 public:
 	CLine();
+	CLine(int x0, int y0, int x1, int y1);
 	~CLine();
+	void setEnd(int x1, int y1);
 	void render(CDC* pDC);
 	void read(CArchive& ar);
 	void write(CArchive& ar);

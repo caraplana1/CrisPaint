@@ -14,6 +14,8 @@
 
 #include "CrisPaintDoc.h"
 #include "CrisPaintView.h"
+#include "CShape.h"
+#include <vector>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -55,10 +57,13 @@ END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
 
+std::vector<CShape> shapes; 
+
 CCrisPaintView::CCrisPaintView() noexcept
 {
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
+	shapes = {};
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -82,7 +87,7 @@ void CCrisPaintView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
-	// TODO: add draw code for native data here
+
 }
 
 void CCrisPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
