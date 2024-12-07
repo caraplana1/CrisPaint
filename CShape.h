@@ -22,7 +22,6 @@ public:
 	virtual void read(CArchive &ar) = 0;
 	virtual void write(CArchive& ar) = 0;
 
-private: 
 	PRIMITIVE_ID type;
 };
 
