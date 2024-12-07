@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CLine.h" />
     <ClInclude Include="CrisPaint.h" />
     <ClInclude Include="CrisPaintDoc.h" />
     <ClInclude Include="CrisPaintView.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="CTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CLine.cpp" />
     <ClCompile Include="CrisPaint.cpp" />
     <ClCompile Include="CrisPaintDoc.cpp" />
     <ClCompile Include="CrisPaintView.cpp" />
