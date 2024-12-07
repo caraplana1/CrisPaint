@@ -22,3 +22,11 @@ void CLine::render(CDC* pDC)
 	pDC->MoveTo(x0, y0);
 	pDC->LineTo(x1, y1);
 }
+
+void CLine::read(CArchive& ar)
+{
+}
+
+void CLine::write(CArchive& ar)
+{
+}

@@ -29,6 +29,7 @@ IMPLEMENT_DYNCREATE(CCrisPaintView, CView)
 BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
 
 	// Line Selection
 	ON_UPDATE_COMMAND_UI(ID_LINE, &CCrisPaintView::OnUpdateLine)
@@ -59,13 +60,14 @@ END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
 
+// List of shapes to draw in orden.
 std::vector<CShape> shapes; 
 
 CCrisPaintView::CCrisPaintView() noexcept
 {
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
-	shapes = {};
+	// shapes = {};
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -96,62 +98,15 @@ void CCrisPaintView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 	OnContextMenu(this, point);
 }
 
-void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
+void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 {
-#ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
-#endif
+	ClientToScreen(&point);
+	OnContextMenu(this, point);
 }
 
-void CCrisPaintView::OnUpdateLine(CCmdUI* pCmdUI)
+void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == LINE_SELECTED);
-}
-
-void CCrisPaintView::OnUpdateCicle(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == CIRCLE_SELECTED);
-}
-
-void CCrisPaintView::OnUpdateCurve(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == CURVE_SELECTED);
-}
-
-void CCrisPaintView::OnUpdateSquare(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == SQUARE_SELECTED);
-}
-
-void CCrisPaintView::OnUpdateTriangle(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == TRIANGLE_SELECTED);
-}
-
-void CCrisPaintView::OnUpdateElipse(CCmdUI* pCmdUI)
-{
-	pCmdUI->Enable(TRUE);
-	pCmdUI->SetCheck(m == ELIPSE_SELECTED);
-}
-
-void CCrisPaintView::OnLine()
-{
-	m = m == LINE_SELECTED ? NOTHING_SELECTED : LINE_SELECTED;
-}
-
-void CCrisPaintView::OnCircle()
-{
-	m = m == CIRCLE_SELECTED ? NOTHING_SELECTED : CIRCLE_SELECTED;
-}
-
-void CCrisPaintView::OnCurve()
-{
-	m = m == CURVE_SELECTED ? NOTHING_SELECTED : CURVE_SELECTED;
+	std::cout << "Mariquito\n";
 }
 
 void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
