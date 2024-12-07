@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Primitives">
+      <UniqueIdentifier>{ec4eb419-0401-44f3-bfa9-841daccef200}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives">
+      <UniqueIdentifier>{67dc2a13-551c-48aa-8f34-327d65160d70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CrisPaint.h">
@@ -39,6 +45,30 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CLine.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CRectangle.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CShape.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriangle.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CCurve.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CElipse.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="CCircle.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CrisPaint.cpp">
@@ -55,6 +85,27 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CLine.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CRectangle.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CShape.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriangle.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CCurve.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CElipse.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="CCircle.cpp">
+      <Filter>Source Files\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
