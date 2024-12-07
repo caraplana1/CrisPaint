@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CCurve.h" />
+    <ClInclude Include="CElipse.h" />
     <ClInclude Include="CLine.h" />
     <ClInclude Include="CRectangle.h" />
     <ClInclude Include="CrisPaint.h" />
@@ -200,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCurve.cpp" />
+    <ClCompile Include="CElipse.cpp" />
     <ClCompile Include="CLine.cpp" />
     <ClCompile Include="CRectangle.cpp" />
     <ClCompile Include="CrisPaint.cpp" />
