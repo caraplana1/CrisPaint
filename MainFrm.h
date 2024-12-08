@@ -16,6 +16,7 @@ public:
 
 // Operations
 public:
+	void setStatusBar(CString& cs);
 
 // Overrides
 public:

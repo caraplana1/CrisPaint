@@ -4,6 +4,9 @@
 
 
 #pragma once
+#include <vector>
+#include "CShape.h"
+#include "CLine.h"
 
 
 class CCrisPaintDoc : public CDocument
@@ -14,6 +17,8 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	// List of shapes to draw in orden.
+	std::vector<CShape*> shapes; 
 
 // Operations
 public:
