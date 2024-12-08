@@ -252,10 +252,15 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Elipse
 	void CCrisPaintView::BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		pDoc->shapes.push_back((CShape*) new CElipse(point.x, point.y, point.x, point.y));
 	}
 
 	void CCrisPaintView::EndSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		int pos = pDoc->shapes.size() - 1;
+		CElipse* elipse = (CElipse*)pDoc->shapes[pos];
+		elipse->setSecond(point.x, point.y);
+		Invalidate(1);
 	}
 
 	// Drawing Triangle
@@ -286,6 +291,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 	void CCrisPaintView::EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		// No necesity to implement.
 	}
 
 	// Drawing Curve
