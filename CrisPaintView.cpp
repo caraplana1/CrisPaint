@@ -44,7 +44,7 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_COMMAND(ID_LINE, &CCrisPaintView::OnLine)
 
 	// Circle Selection
-	ON_UPDATE_COMMAND_UI(ID_CIRCLE, &CCrisPaintView::OnUpdateCicle)
+	ON_UPDATE_COMMAND_UI(ID_CIRCLE, &CCrisPaintView::OnUpdateCircle)
 	ON_COMMAND(ID_CIRCLE, &CCrisPaintView::OnCircle)
 
 	// Curve Selection
@@ -128,17 +128,19 @@ void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 		EndDrawLine(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CIRCLE_SELECTED:
+		EndDrawCircle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CURVE_SELECTED:
+		EndDrawCurve(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
 		EndDrawSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
+		EndDrawTriangle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::ELIPSE_SELECTED:
-		break;
-	default:
+		EndDrawElipse(nFlags, point, pdoc);
 		break;
 	}
 
@@ -153,7 +155,6 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (!pdoc)
 		return;
 
-
 	switch (m)
 	{
 	case CCrisPaintView::NOTHING_SELECTED:
@@ -162,15 +163,19 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 		DrawLine(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CIRCLE_SELECTED:
+		DrawCircle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CURVE_SELECTED:
+		DrawCurve(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
 		DrawSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
+		DrawTriangle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::ELIPSE_SELECTED:
+		DrawElipse(nFlags, point, pdoc);
 		break;
 	}
 
@@ -195,37 +200,75 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #endif
 }
 
-#pragma region Primitives Drawing
+// Gets the points to draw the primitives
+#pragma region Primitives setting
+	// Drawing Line
+	void CCrisPaintView::DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		pDoc->shapes.push_back((CShape*)(new CLine(point.x, point.y, point.x, point.y)));
+	}
 
-void CCrisPaintView::DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-{
-	pDoc->shapes.push_back((CShape*)(new CLine(point.x, point.y, point.x, point.y)));
-}
+	void CCrisPaintView::EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		int pos = pDoc->shapes.size() - 1;
+		CLine* line = (CLine*)pDoc->shapes[pos];
+		line->setEnd(point.x, point.y);
+		Invalidate(1);
+	}
 
-void CCrisPaintView::EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-{
-	int pos = pDoc->shapes.size() - 1;
-	CLine* line = (CLine*)pDoc->shapes[pos];
-	line->setEnd(point.x, point.y);
-	Invalidate(1);
-}
+	// Drawing Circle
+	void CCrisPaintView::DrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
 
-void CCrisPaintView::DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-{
-	pDoc->shapes.push_back((CShape*)new CRectangle(point.x, point.y, point.x, point.y));
-}
+	void CCrisPaintView::EndDrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
 
-void CCrisPaintView::EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-{
-	int pos = pDoc->shapes.size() - 1;
-	CRectangle* square = (CRectangle*)pDoc->shapes[pos];
-	square->setEndPoint(point.x, point.y);
-	Invalidate(1);
-}
+	// Drawing Elipse
+	void CCrisPaintView::DrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	void CCrisPaintView::EndDrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	// Drawing Triangle
+	void CCrisPaintView::DrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	void CCrisPaintView::EndDrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	// Drawing Curve
+	void CCrisPaintView::DrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	void CCrisPaintView::EndDrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+	}
+
+	// Drawing square
+	void CCrisPaintView::DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		pDoc->shapes.push_back((CShape*)new CRectangle(point.x, point.y, point.x, point.y));
+	}
+
+	void CCrisPaintView::EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		int pos = pDoc->shapes.size() - 1;
+		CRectangle* square = (CRectangle*)pDoc->shapes[pos];
+		square->setEndPoint(point.x, point.y);
+		Invalidate(1);
+	}
 
 #pragma endregion
 
-
+// Select what primitive you want to draw
 #pragma region Primitives Selection Menu
 
 	// Line
@@ -241,7 +284,7 @@ void CCrisPaintView::EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDo
 	}
 
 	// Circle
-	void CCrisPaintView::OnUpdateCicle(CCmdUI* pCmdUI)
+	void CCrisPaintView::OnUpdateCircle(CCmdUI* pCmdUI)
 	{
 		pCmdUI->Enable(TRUE);
 		pCmdUI->SetCheck(m == CIRCLE_SELECTED);
