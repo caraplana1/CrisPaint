@@ -115,6 +115,7 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 
 }
 
+// Right mouse button up.
 void CCrisPaintView::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	ClientToScreen(&point);
@@ -122,6 +123,7 @@ void CCrisPaintView::OnRButtonUp(UINT nFlags, CPoint point)
 	CView::OnRButtonUp(nFlags, point);
 }
 
+// Left mouse button up.
 void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CCrisPaintDoc* pdoc = GetDocument();
@@ -160,6 +162,7 @@ void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 	CView::OnLButtonUp(nFlags, point);
 }
 
+// Left mouse button down.
 void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CCrisPaintDoc* pdoc = GetDocument();
@@ -198,6 +201,7 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 	CView::OnLButtonDown(nFlags, point);
 }
 
+// Mouse movement
 void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
@@ -215,7 +219,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #endif
 }
 
-// Gets the points to draw the primitives
+// Gets the points for the primitives
 #pragma region Primitives setting
 	// Drawing Line
 	void CCrisPaintView::BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
@@ -234,10 +238,15 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Circle
 	void CCrisPaintView::BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		pDoc->shapes.push_back((CShape*)new CCircle(point.x, point.y, point.x, point.y));
 	}
 
 	void CCrisPaintView::EndSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		int pos = pDoc->shapes.size() - 1;
+		CCircle* circle = (CCircle*)pDoc->shapes[pos];
+		circle->setPointOne(point.x, point.y);
+		Invalidate(1);
 	}
 
 	// Drawing Elipse
