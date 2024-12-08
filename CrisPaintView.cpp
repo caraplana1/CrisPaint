@@ -62,6 +62,10 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Elipse Selection
 	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateElipse)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnElipse)
+
+	// Selection Selection
+	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateSelect)
+	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnSelect)
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -338,9 +342,32 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		pCmdUI->SetCheck(m == ELIPSE_SELECTED);
 	}
 
+	void CCrisPaintView::OnUpdateSelect(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == SELECTION_SELECTED); 
+	} 
+
+	void CCrisPaintView::OnUpdateUp(CCmdUI* pCmdUI)
+	{
+		if (SELECTION_SELECTED != m)
+			return;
+	}
+
+	void CCrisPaintView::OnUpdateDown(CCmdUI* pCmdUI)
+	{
+		if (SELECTION_SELECTED != m)
+			return;
+	}
+
 	void CCrisPaintView::OnElipse()
 	{
 		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
+	}
+
+	void CCrisPaintView::OnSelect()
+	{
+		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
 	}
 #pragma endregion
 

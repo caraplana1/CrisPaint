@@ -17,7 +17,10 @@ public:
 		CURVE_SELECTED,
 		SQUARE_SELECTED,
 		TRIANGLE_SELECTED,
-		ELIPSE_SELECTED
+		ELIPSE_SELECTED,
+		SELECTION_SELECTED,
+		UP_SELECTED,
+		DOWN_SELECTED
 	};
 
 	Primitive_Selection m;
@@ -85,6 +88,9 @@ public:
 	afx_msg void OnUpdateSquare(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateTriangle(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateElipse(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateSelect(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateUp(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateDown(CCmdUI* pCmdUI);
 
 	afx_msg void OnLine();
 	afx_msg void OnCircle();
@@ -92,6 +98,7 @@ public:
 	afx_msg void OnSquare();
 	afx_msg void OnTriangle();
 	afx_msg void OnElipse();
+	afx_msg void OnSelect();
 
 	// Button and mouse handling
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
