@@ -18,6 +18,7 @@
 #include "CLine.h"
 #include "CCircle.h"
 #include "CRectangle.h"
+#include "CTriangle.h"
 #include "CCurve.h"
 #include "CElipse.h"
 #include <vector>
@@ -26,6 +27,10 @@
 #define new DEBUG_NEW
 #endif
 
+// ===========================================
+// ** Use to set multiple vertex of a shape ** 
+// ===========================================
+int CURRENT_TRIANGLE_VERTEX; 
 
 // CCrisPaintView
 
@@ -74,6 +79,7 @@ CCrisPaintView::CCrisPaintView() noexcept
 {
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
+	CURRENT_TRIANGLE_VERTEX = 0;
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -98,11 +104,12 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		return;
 
 	CShape* aux;
+	int lastPos = pDoc->shapes.size() - 1;
 
-	for (int i = 0; i < pDoc->shapes.size(); i++)
+	for (int i = 0; i <= lastPos; i++)
 	{
 		aux = pDoc->shapes[i];
-		if (aux->IsReady() || (!aux->IsReady() && i == pDoc->shapes.size() - 1))
+		if (aux->IsReady() || (!aux->IsReady() && i == lastPos))
 			aux->render(pDC);
 	}
 
@@ -159,6 +166,9 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 	ASSERT_VALID(pdoc);
 	if (!pdoc)
 		return;
+
+	if (m != TRIANGLE_SELECTED)
+		CURRENT_TRIANGLE_VERTEX = 0;
 
 	switch (m)
 	{
@@ -242,6 +252,27 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Triangle
 	void CCrisPaintView::DrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
+		if (CURRENT_TRIANGLE_VERTEX == 0)
+		{
+			pDoc->shapes.push_back((CShape*) new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y));
+			CURRENT_TRIANGLE_VERTEX++;
+		}
+		else if (CURRENT_TRIANGLE_VERTEX == 1)
+		{
+			int pos = pDoc->shapes.size() - 1;
+			CTriangle* tri = (CTriangle*)pDoc->shapes[pos];
+			tri->setSecond(point.x, point.y);
+			CURRENT_TRIANGLE_VERTEX++;
+			Invalidate(1);
+		}
+		else if (CURRENT_TRIANGLE_VERTEX == 2)
+		{
+			int pos = pDoc->shapes.size() - 1;
+			CTriangle* tri = (CTriangle*)pDoc->shapes[pos];
+			tri->setThird(point.x, point.y);
+			CURRENT_TRIANGLE_VERTEX = 0;
+			Invalidate(1);
+		}
 	}
 
 	void CCrisPaintView::EndDrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
