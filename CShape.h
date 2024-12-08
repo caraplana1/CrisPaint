@@ -16,6 +16,7 @@ class CShape
 {
 protected:
 	bool isReady;
+	PRIMITIVE_ID type;
 public:
 	CShape();
 	~CShape();
@@ -25,6 +26,5 @@ public:
 	virtual void write(CArchive& ar) = 0;
 	bool IsReady();
 
-	PRIMITIVE_ID type;
 };
 
