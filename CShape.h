@@ -14,6 +14,8 @@ enum PRIMITIVE_ID
 
 class CShape
 {
+protected:
+	bool isReady;
 public:
 	CShape();
 	~CShape();
@@ -21,6 +23,7 @@ public:
 	virtual void render(CDC* pDC) = 0;
 	virtual void read(CArchive &ar) = 0;
 	virtual void write(CArchive& ar) = 0;
+	bool IsReady();
 
 	PRIMITIVE_ID type;
 };

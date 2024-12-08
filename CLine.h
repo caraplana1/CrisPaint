@@ -1,7 +1,7 @@
 #pragma once
 #include "CShape.h"
 
-class CLine : CShape
+class CLine : public CShape
 {
 public:
 	CLine();

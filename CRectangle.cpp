@@ -9,6 +9,7 @@ CRectangle::CRectangle()
 	this->y1 = 0;
 
 	this->type = SQUARE;
+	isReady = x0 != x1 || y0 != y1;
 }
 
 CRectangle::CRectangle(int x0, int y0, int x1, int y1)
@@ -19,12 +20,14 @@ CRectangle::CRectangle(int x0, int y0, int x1, int y1)
 	this->y1 = y1;
 
 	this->type = SQUARE;
+	isReady = x0 != x1 || y0 != y1;
 }
 
 void CRectangle::setEndPoint(int x, int y)
 {
 	this->x1 = x;
 	this->y1 = y;
+	isReady = x0 != x1 || y0 != y1;
 }
 
 void CRectangle::render(CDC* pDC)

@@ -9,12 +9,15 @@ CLine::CLine(int x0, int y0, int x1, int y1)
 	this->y1 = y1;
 
 	this->type = LINE;
+	isReady = x0 != x1 || y0 != y1;
 }
 
 void CLine::setEnd(int x1, int y1)
 {
 	this->x1 = x1;
 	this->y1 = y1;
+
+	isReady = x0 != x1 || y0 != y1;
 }
 
 void CLine::render(CDC* pDC)

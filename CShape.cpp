@@ -10,3 +10,8 @@ CShape::~CShape()
 {
 
 }
+
+bool CShape::IsReady()
+{
+    return this->isReady;
+}

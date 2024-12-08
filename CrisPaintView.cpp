@@ -102,7 +102,8 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	for (int i = 0; i < pDoc->shapes.size(); i++)
 	{
 		aux = pDoc->shapes[i];
-		aux->render(pDC);
+		if (aux->IsReady() || (!aux->IsReady() && i == pDoc->shapes.size() - 1))
+			aux->render(pDC);
 	}
 
 }
