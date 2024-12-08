@@ -11,7 +11,7 @@ CRectangle::CRectangle()
 	this->type = SQUARE;
 }
 
-CRectangle::CRectangle(int x0, int x1, int y0, int y1)
+CRectangle::CRectangle(int x0, int y0, int x1, int y1)
 {
 	this->x0 = x0;
 	this->x1 = x1;
@@ -21,9 +21,15 @@ CRectangle::CRectangle(int x0, int x1, int y0, int y1)
 	this->type = SQUARE;
 }
 
+void CRectangle::setEndPoint(int x, int y)
+{
+	this->x1 = x;
+	this->y1 = y;
+}
+
 void CRectangle::render(CDC* pDC)
 {
-	pDC->MoveTo(x0, y0);
+	pDC->MoveTo(0, 0);
 	pDC->Rectangle(x0, y0, x1, y1);
 }
 

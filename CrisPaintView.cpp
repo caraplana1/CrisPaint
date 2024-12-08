@@ -132,6 +132,7 @@ void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 	case CCrisPaintView::CURVE_SELECTED:
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
+		EndDrawSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
 		break;
@@ -165,6 +166,7 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 	case CCrisPaintView::CURVE_SELECTED:
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
+		DrawSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
 		break;
@@ -205,6 +207,19 @@ void CCrisPaintView::EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	int pos = pDoc->shapes.size() - 1;
 	CLine* line = (CLine*)pDoc->shapes[pos];
 	line->setEnd(point.x, point.y);
+	Invalidate(1);
+}
+
+void CCrisPaintView::DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+{
+	pDoc->shapes.push_back((CShape*)new CRectangle(point.x, point.y, point.x, point.y));
+}
+
+void CCrisPaintView::EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+{
+	int pos = pDoc->shapes.size() - 1;
+	CRectangle* square = (CRectangle*)pDoc->shapes[pos];
+	square->setEndPoint(point.x, point.y);
 	Invalidate(1);
 }
 

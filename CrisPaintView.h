@@ -30,6 +30,9 @@ public:
 	void DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 	void EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
+	void DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+
 // Overrides
 public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
