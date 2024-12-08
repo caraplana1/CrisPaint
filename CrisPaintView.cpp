@@ -137,22 +137,22 @@ void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 	case CCrisPaintView::NOTHING_SELECTED:
 		break;
 	case CCrisPaintView::LINE_SELECTED:
-		EndDrawLine(nFlags, point, pdoc);
+		EndSetLine(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CIRCLE_SELECTED:
-		EndDrawCircle(nFlags, point, pdoc);
+		EndSetCircle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CURVE_SELECTED:
-		EndDrawCurve(nFlags, point, pdoc);
+		EndSetCurve(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
-		EndDrawSquare(nFlags, point, pdoc);
+		EndSetSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
-		EndDrawTriangle(nFlags, point, pdoc);
+		EndSetTriangle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::ELIPSE_SELECTED:
-		EndDrawElipse(nFlags, point, pdoc);
+		EndSetElipse(nFlags, point, pdoc);
 		break;
 	}
 
@@ -175,22 +175,22 @@ void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
 	case CCrisPaintView::NOTHING_SELECTED:
 		break;
 	case CCrisPaintView::LINE_SELECTED:
-		DrawLine(nFlags, point, pdoc);
+		BegingSetLine(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CIRCLE_SELECTED:
-		DrawCircle(nFlags, point, pdoc);
+		BegingSetCircle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::CURVE_SELECTED:
-		DrawCurve(nFlags, point, pdoc);
+		BegingSetCurve(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::SQUARE_SELECTED:
-		DrawSquare(nFlags, point, pdoc);
+		BegingSetSquare(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::TRIANGLE_SELECTED:
-		DrawTriangle(nFlags, point, pdoc);
+		BegingSetTriangle(nFlags, point, pdoc);
 		break;
 	case CCrisPaintView::ELIPSE_SELECTED:
-		DrawElipse(nFlags, point, pdoc);
+		BegingSetElipse(nFlags, point, pdoc);
 		break;
 	}
 
@@ -218,12 +218,12 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 // Gets the points to draw the primitives
 #pragma region Primitives setting
 	// Drawing Line
-	void CCrisPaintView::DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		pDoc->shapes.push_back((CShape*)(new CLine(point.x, point.y, point.x, point.y)));
 	}
 
-	void CCrisPaintView::EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		int pos = pDoc->shapes.size() - 1;
 		CLine* line = (CLine*)pDoc->shapes[pos];
@@ -232,25 +232,25 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	}
 
 	// Drawing Circle
-	void CCrisPaintView::DrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
-	void CCrisPaintView::EndDrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
 	// Drawing Elipse
-	void CCrisPaintView::DrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
-	void CCrisPaintView::EndDrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
 	// Drawing Triangle
-	void CCrisPaintView::DrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		if (CURRENT_TRIANGLE_VERTEX == 0)
 		{
@@ -275,26 +275,26 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		}
 	}
 
-	void CCrisPaintView::EndDrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
 	// Drawing Curve
-	void CCrisPaintView::DrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
-	void CCrisPaintView::EndDrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 	}
 
 	// Drawing square
-	void CCrisPaintView::DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		pDoc->shapes.push_back((CShape*)new CRectangle(point.x, point.y, point.x, point.y));
 	}
 
-	void CCrisPaintView::EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	void CCrisPaintView::EndSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		int pos = pDoc->shapes.size() - 1;
 		CRectangle* square = (CRectangle*)pDoc->shapes[pos];

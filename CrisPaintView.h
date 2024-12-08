@@ -33,28 +33,28 @@ public:
 	// =======================
 
 	// Line
-	void DrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Circle
-	void DrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Elipse
-	void DrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Triangle
-	void DrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Curve
-	void DrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Square
-	void DrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndDrawSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+	void EndSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 // Overrides
 public:
