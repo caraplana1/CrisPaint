@@ -58,26 +58,8 @@ void CCircle::setPointOne(int x1, int y1)
 
 void CCircle::render(CDC* pDC)
 {
-	CPen *old, white;
-	CBrush *oldBrush, bWhite;
-
-	white.CreatePen(PS_SOLID | PS_COSMETIC, 1, RGB(255, 255, 255));
-	bWhite.CreateSolidBrush(RGB(255, 255, 255));
-
 	pDC->MoveTo(0, 0);
-	pDC->Chord(centerX - r, centerY - r, centerX + r, centerY + r, centerX + r, centerY, centerX - r, centerY);
-	pDC->Chord(centerX - r, centerY - r, centerX + r, centerY + r, centerX - r, centerY, centerX + r, centerY);
-
-	old = pDC->SelectObject(&white);
-	oldBrush = pDC->SelectObject(&bWhite);
-
-	pDC->MoveTo(centerX - r + 1, centerY);
-	pDC->LineTo(centerX + r - 1, centerY);
-	pDC->MoveTo(centerX - r + 1, centerY-1);
-	pDC->LineTo(centerX + r - 1, centerY-1);
-
-	pDC->SelectObject(old);
-	pDC->SelectObject(oldBrush);
+	pDC->Ellipse(centerX - r, centerY - r, centerX + r, centerY + r);
 }
 
 void CCircle::read(CArchive& ar)
