@@ -52,3 +52,17 @@ void CElipse::read(CArchive& ar)
 void CElipse::write(CArchive& ar)
 {
 }
+
+std::string CElipse::ToString()
+{
+	return std::string();
+}
+
+bool CElipse::IsInside(int x, int y)
+{
+	return false;
+}
+
+void CElipse::paintShape(float r, float g, float b)
+{
+}

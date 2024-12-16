@@ -43,3 +43,17 @@ void CRectangle::read(CArchive& ar)
 void CRectangle::write(CArchive& ar)
 {
 }
+
+std::string CRectangle::ToString()
+{
+	return std::string();
+}
+
+bool CRectangle::IsInside(int x, int y)
+{
+	return false;
+}
+
+void CRectangle::paintShape(float r, float g, float b)
+{
+}

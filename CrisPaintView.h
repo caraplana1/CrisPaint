@@ -25,6 +25,8 @@ public:
 
 	Primitive_Selection m;
 	CCrisPaintDoc* GetDocument() const;
+private:
+	CDC doubleBuffer;
 
 // Operations
 public:

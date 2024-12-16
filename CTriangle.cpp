@@ -71,3 +71,17 @@ void CTriangle::read(CArchive& ar)
 void CTriangle::write(CArchive& ar)
 {
 }
+
+std::string CTriangle::ToString()
+{
+	return std::string();
+}
+
+bool CTriangle::IsInside(int x, int y)
+{
+	return false;
+}
+
+void CTriangle::paintShape(float r, float g, float b)
+{
+}

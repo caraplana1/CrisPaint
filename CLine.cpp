@@ -33,3 +33,17 @@ void CLine::read(CArchive& ar)
 void CLine::write(CArchive& ar)
 {
 }
+
+std::string CLine::ToString()
+{
+	return std::string();
+}
+
+bool CLine::IsInside(int x, int y)
+{
+	return false;
+}
+
+void CLine::paintShape(float r, float g, float b)
+{
+}

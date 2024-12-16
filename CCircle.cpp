@@ -87,3 +87,17 @@ void CCircle::read(CArchive& ar)
 void CCircle::write(CArchive& ar)
 {
 }
+
+std::string CCircle::ToString()
+{
+	return std::string();
+}
+
+bool CCircle::IsInside(int x, int y)
+{
+	return false;
+}
+
+void CCircle::paintShape(float r, float g, float b)
+{
+}

@@ -103,6 +103,11 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
+	// CDC compatible for the double buffer.
+	if (doubleBuffer == NULL)
+		doubleBuffer.CreateCompatibleDC(pDC);
+
+	// Create an auxiliar ccshape object for render.
 	CShape* aux;
 	int lastPos = pDoc->shapes.size() - 1;
 
@@ -110,9 +115,14 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	{
 		aux = pDoc->shapes[i];
 		if (aux->IsReady() || (!aux->IsReady() && i == lastPos))
-			aux->render(pDC);
+			aux->render(pDC); // Render in the second buffer.
 	}
 
+	CRect rect;
+	GetClientRect(&rect);
+
+	pDC->BitBlt(rect.TopLeft().x, rect.TopLeft().y, rect.BottomRight().x, rect.BottomRight().y, &doubleBuffer, 0, 0, SRCCOPY);
+	
 }
 
 // Right mouse button up.
