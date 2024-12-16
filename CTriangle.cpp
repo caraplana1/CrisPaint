@@ -77,11 +77,29 @@ std::string CTriangle::ToString()
 	return std::string();
 }
 
+// Check if a point is inside a shape
 bool CTriangle::IsInside(int x, int y)
 {
-	return false;
+	int minX = minThreeCoord(x0, x1, x2);
+	int maxX = maxThreeCoord(x0, x1, x2);
+	int minY = minThreeCoord(y0, y1, y2);
+	int maxY = maxThreeCoord(y0, y1, y2);
+
+	return minX < x && x < maxX && minY < y && y < maxY;
 }
 
 void CTriangle::paintShape(float r, float g, float b)
 {
+}
+
+// Return the min value in three. Use for a same axis of a set of points
+int CTriangle::minThreeCoord(int p0, int p1, int p2)
+{
+	return p0 < (p1 < p2 ? p1 : p2) ? p0 : (p1 < p2 ? p1 : p2);
+}
+
+// Return the max value in three. Use for a same axis of a set of points
+int CTriangle::maxThreeCoord(int p0, int p1, int p2)
+{
+	return p0 > (p1 > p2 ? p1 : p2) ? p0 : (p1 > p2 ? p1 : p2);
 }

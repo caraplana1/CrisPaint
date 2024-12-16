@@ -11,6 +11,7 @@ public:
 	void write(CArchive& ar);
 
 	std::string ToString();
+	// Check if a point is inside a shape
 	bool IsInside(int x, int y);
 	void paintShape(float r, float g, float b);
 private:

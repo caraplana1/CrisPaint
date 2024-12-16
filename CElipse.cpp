@@ -58,9 +58,15 @@ std::string CElipse::ToString()
 	return std::string();
 }
 
+// Check if a point is inside a shape
 bool CElipse::IsInside(int x, int y)
 {
-	return false;
+	int minX = x0 < x1 ? x0 : x1;
+	int maxX = x0 > x1 ? x0 : x1;
+	int minY = y0 < y1 ? y0 : y1;
+	int maxY = y0 > y1 ? y0 : y1;
+
+	return minX < x && x < maxX && minY < y && y < maxY;
 }
 
 void CElipse::paintShape(float r, float g, float b)

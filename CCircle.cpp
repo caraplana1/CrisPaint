@@ -75,9 +75,10 @@ std::string CCircle::ToString()
 	return std::string();
 }
 
+// Check if a point is inside a shape
 bool CCircle::IsInside(int x, int y)
 {
-	return false;
+	return centerX - r < x && x < centerX + r && centerY - r < y && y < centerY + y;
 }
 
 void CCircle::paintShape(float r, float g, float b)

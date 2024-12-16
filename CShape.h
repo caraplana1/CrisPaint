@@ -32,6 +32,7 @@ public:
 	virtual void write(CArchive& ar) = 0;
 
 	virtual std::string ToString() = 0;
+	// Check if a point is inside a shape
 	virtual bool IsInside(int x, int y) = 0;
 	virtual void paintShape(float r, float g, float b) = 0;
 	bool IsReady();
