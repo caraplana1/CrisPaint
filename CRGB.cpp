@@ -6,6 +6,13 @@ CRGB::CRGB()
 	this->red = 255;
 	this->green = 255;
 	this->blue = 255;
+
+	this->color = RGB(red, green, blue);
+}
+
+CRGB::CRGB(COLORREF color)
+{
+	this->color = color;
 }
 
 CRGB::CRGB(int red, int green, int blue)
@@ -13,6 +20,8 @@ CRGB::CRGB(int red, int green, int blue)
 	this->red = red;
 	this->green = green;
 	this->blue = blue;
+
+	this->color = RGB(red, green, blue);
 }
 
 int CRGB::getRed()

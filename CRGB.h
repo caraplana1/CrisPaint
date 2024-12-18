@@ -4,12 +4,14 @@
 class CRGB
 {
 private: 
+	COLORREF color;
 	int red;
 	int green;
 	int blue;
 
 	public:
 		CRGB();
+		CRGB(COLORREF color);
 		CRGB(int red, int green, int blue);
 		int getRed();
 		int getGreen();
