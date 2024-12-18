@@ -41,8 +41,19 @@ void CElipse::setSecond(int x1, int y1)
 
 void CElipse::render(CDC* pDC)
 {
+	CBrush* oldBrush;
+	CBrush newBrush;
+	int red = currentColor.getRed();
+	int green = currentColor.getGreen();
+	int blue = currentColor.getBlue();
+
+	newBrush.CreateSolidBrush(RGB(red, green, blue));
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+
 	pDC->MoveTo(0, 0);
 	pDC->Ellipse(x0, y0, x1, y1);
+
+	pDC->SelectObject(oldBrush);
 }
 
 void CElipse::read(CArchive& ar)

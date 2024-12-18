@@ -32,8 +32,19 @@ void CRectangle::setEndPoint(int x, int y)
 
 void CRectangle::render(CDC* pDC)
 {
+	CBrush* oldBrush;
+	CBrush newBrush;
+	int red = currentColor.getRed();
+	int green = currentColor.getGreen();
+	int blue = currentColor.getBlue();
+
+	newBrush.CreateSolidBrush(RGB(red, green, blue));
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+
 	pDC->MoveTo(0, 0);
 	pDC->Rectangle(x0, y0, x1, y1);
+
+	pDC->SelectObject(oldBrush);
 }
 
 void CRectangle::read(CArchive& ar)

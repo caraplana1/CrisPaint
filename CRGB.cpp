@@ -3,9 +3,9 @@
 
 CRGB::CRGB()
 {
-	this->red = 0;
-	this->green = 0;
-	this->blue = 0;
+	this->red = 255;
+	this->green = 255;
+	this->blue = 255;
 }
 
 CRGB::CRGB(int red, int green, int blue)
@@ -28,4 +28,9 @@ int CRGB::getGreen()
 int CRGB::getBlue()
 {
 	return this->blue;
+}
+
+bool CRGB::operator==(CRGB* color)
+{
+	return (this->red == color->getRed()) && (this->green == color->getGreen()) && (this->blue == color->getBlue());
 }

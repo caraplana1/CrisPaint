@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "CRGB.h"
 #include "CShape.h"
 #include <string>
 #include <vector>
@@ -19,6 +20,7 @@ class CShape
 protected:
 	bool isReady;
 	bool isFiled;
+	CRGB currentColor;
 	CBrush brush;
 	CPen pen;
 	PRIMITIVE_ID type;

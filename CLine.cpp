@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CLine.h"
 
+CRGB* WHITE;
+
 CLine::CLine(int x0, int y0, int x1, int y1)
 {
 	this->x0 = x0;
@@ -10,6 +12,7 @@ CLine::CLine(int x0, int y0, int x1, int y1)
 
 	this->type = LINE;
 	isReady = x0 != x1 || y0 != y1;
+	WHITE = new CRGB(255, 255, 255);
 }
 
 void CLine::setEnd(int x1, int y1)
@@ -22,8 +25,26 @@ void CLine::setEnd(int x1, int y1)
 
 void CLine::render(CDC* pDC)
 {
-	pDC->MoveTo(x0, y0);
-	pDC->LineTo(x1, y1);
+	CPen* oldPen;
+	CPen newPen;
+
+	// If the line is white draw it black
+	if (currentColor == WHITE)
+	{
+		pDC->MoveTo(x0, y0);
+		pDC->LineTo(x1, y1);
+		return;
+	}
+
+	int red = currentColor.getRed();
+	int green = currentColor.getGreen();
+	int blue = currentColor.getBlue();
+	newPen.CreatePen(PS_SOLID, 1, RGB(red, green, blue));
+
+	oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+
+	pDC->SelectObject(oldPen);
 }
 
 void CLine::read(CArchive& ar)

@@ -58,8 +58,19 @@ void CCircle::setPointOne(int x1, int y1)
 
 void CCircle::render(CDC* pDC)
 {
+	CBrush* oldBrush;
+	CBrush newBrush;
+	int red = currentColor.getRed();
+	int green = currentColor.getGreen();
+	int blue = currentColor.getBlue();
+	
+	newBrush.CreateSolidBrush(RGB(red, green, blue));
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+
 	pDC->MoveTo(0, 0);
 	pDC->Ellipse(centerX - r, centerY - r, centerX + r, centerY + r);
+
+	pDC->SelectObject(oldBrush);
 }
 
 void CCircle::read(CArchive& ar)
