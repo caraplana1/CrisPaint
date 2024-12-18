@@ -14,6 +14,7 @@ private:
 		int getRed();
 		int getGreen();
 		int getBlue();
+		COLORREF getColor();
 		bool operator==(CRGB* color);
 };
 

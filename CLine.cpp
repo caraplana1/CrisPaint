@@ -25,9 +25,6 @@ void CLine::setEnd(int x1, int y1)
 
 void CLine::render(CDC* pDC)
 {
-	CPen* oldPen;
-	CPen newPen;
-
 	// If the line is white draw it black
 	if (currentColor == WHITE)
 	{
@@ -36,13 +33,12 @@ void CLine::render(CDC* pDC)
 		return;
 	}
 
-	int red = currentColor.getRed();
-	int green = currentColor.getGreen();
-	int blue = currentColor.getBlue();
-	newPen.CreatePen(PS_SOLID, 1, RGB(red, green, blue));
+	CPen* oldPen;
+	CPen newPen;
+
+	newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
 
 	oldPen = (CPen*)pDC->SelectObject(&newPen);
-
 
 	pDC->SelectObject(oldPen);
 }

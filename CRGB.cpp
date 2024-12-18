@@ -30,6 +30,11 @@ int CRGB::getBlue()
 	return this->blue;
 }
 
+COLORREF CRGB::getColor()
+{
+	return RGB(this->red, this->green, this->blue);
+}
+
 bool CRGB::operator==(CRGB* color)
 {
 	return (this->red == color->getRed()) && (this->green == color->getGreen()) && (this->blue == color->getBlue());

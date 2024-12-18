@@ -34,11 +34,8 @@ void CRectangle::render(CDC* pDC)
 {
 	CBrush* oldBrush;
 	CBrush newBrush;
-	int red = currentColor.getRed();
-	int green = currentColor.getGreen();
-	int blue = currentColor.getBlue();
 
-	newBrush.CreateSolidBrush(RGB(red, green, blue));
+	newBrush.CreateSolidBrush(currentColor.getColor());
 	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
 	pDC->MoveTo(0, 0);
