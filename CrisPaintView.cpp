@@ -69,8 +69,8 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnElipse)
 
 	// Selection Selection
-	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateSelect)
-	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnSelect)
+	ON_UPDATE_COMMAND_UI(ID_SELECT, &CCrisPaintView::OnUpdateSelect)
+	ON_COMMAND(ID_SELECT, &CCrisPaintView::OnSelect)
 
 	// Select a color
 	ON_UPDATE_COMMAND_UI(ID_COLOR, &CCrisPaintView::OnUpdateColor)
@@ -166,9 +166,6 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		case CCrisPaintView::SQUARE_SELECTED:
 			EndSetSquare(nFlags, point, pdoc);
 			break;
-		case CCrisPaintView::TRIANGLE_SELECTED:
-			EndSetTriangle(nFlags, point, pdoc);
-			break;
 		case CCrisPaintView::ELIPSE_SELECTED:
 			EndSetElipse(nFlags, point, pdoc);
 			break;
@@ -185,6 +182,9 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		ASSERT_VALID(pdoc);
 		if (!pdoc)
 			return;
+
+		if (m != SELECTION_SELECTED)
+			shapeSelected = -1;
 
 		if (m != TRIANGLE_SELECTED)
 			CURRENT_TRIANGLE_VERTEX = 0;
@@ -210,6 +210,10 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 			break;
 		case CCrisPaintView::ELIPSE_SELECTED:
 			BegingSetElipse(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::SELECTION_SELECTED:
+			shapeSelected = StartSelection(nFlags, point, pdoc);
+			m = NOTHING_SELECTED;
 			break;
 		}
 
@@ -315,11 +319,6 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		}
 	}
 
-	void CCrisPaintView::EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-	{
-		// No necesity to implement.
-	}
-
 	// Drawing Curve
 	void CCrisPaintView::BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
@@ -343,6 +342,19 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		CRectangle* square = (CRectangle*)pDoc->shapes[pos];
 		square->setEndPoint(point.x, point.y);
 		Invalidate(1);
+	}
+
+	int CCrisPaintView::StartSelection(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		std::vector<CShape*> shapes = pDoc->shapes;
+
+		for (int i = shapes.size() - 1; i >= 0; i--)
+		{
+			if (shapes[i]->IsInside(point.x, point.y))
+				return i;
+		}
+
+		return -1;
 	}
 
 #pragma endregion
@@ -438,7 +450,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::OnUpdateColor(CCmdUI* pCmdUI)
 	{
 		pCmdUI->Enable(TRUE);
-		pCmdUI->SetCheck(m == COLOR_SELECTED);
+		pCmdUI->SetCheck(selectColor);
 	}
 
 	void CCrisPaintView::OnElipse()
@@ -448,13 +460,14 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 	void CCrisPaintView::OnSelect()
 	{
-		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
+		m = m == SELECTION_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
 	}
 
 	void CCrisPaintView::OnColor()
 	{
-		m = m == COLOR_SELECTED ? NOTHING_SELECTED : COLOR_SELECTED;
+		selectColor = true;
 		colorDial.DoModal();
+		selectColor = false;
 	}
 
 #pragma endregion

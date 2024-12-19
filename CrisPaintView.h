@@ -20,11 +20,12 @@ public:
 		ELIPSE_SELECTED,
 		SELECTION_SELECTED,
 		UP_SELECTED,
-		DOWN_SELECTED,
-		COLOR_SELECTED
+		DOWN_SELECTED
 	};
 
 	Primitive_Selection m;
+	bool selectColor = false;
+	int shapeSelected = -1;
 	CColorDialog colorDial;
 	CCrisPaintDoc* GetDocument() const;
 private:
@@ -50,7 +51,6 @@ public:
 
 	// Triangle
 	void BegingSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Curve
 	void BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
@@ -59,6 +59,9 @@ public:
 	// Square
 	void BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 	void EndSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+
+	// Selection
+	int StartSelection(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 // Overrides
 public:
