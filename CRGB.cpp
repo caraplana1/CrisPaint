@@ -13,6 +13,9 @@ CRGB::CRGB()
 CRGB::CRGB(COLORREF color)
 {
 	this->color = color;
+	this->red = GetRValue(color);
+	this->green = GetGValue(color);
+	this->blue = GetBValue(color);
 }
 
 CRGB::CRGB(int red, int green, int blue)
@@ -41,7 +44,7 @@ int CRGB::getBlue()
 
 COLORREF CRGB::getColor()
 {
-	return RGB(this->red, this->green, this->blue);
+	return this->color;
 }
 
 bool CRGB::operator==(CRGB* color)

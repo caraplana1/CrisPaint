@@ -38,6 +38,7 @@ public:
 	virtual bool IsInside(int x, int y) = 0;
 	virtual void paintShape(float r, float g, float b) = 0;
 	bool IsReady();
-
+	void SetColor(int r, int g, int b);
+	void SetColor(COLORREF color);
 };
 

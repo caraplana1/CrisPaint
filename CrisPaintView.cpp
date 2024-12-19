@@ -71,6 +71,10 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Selection Selection
 	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateSelect)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnSelect)
+
+	// Select a color
+	ON_UPDATE_COMMAND_UI(ID_COLOR, &CCrisPaintView::OnUpdateColor)
+	ON_COMMAND(ID_COLOR, &CCrisPaintView::OnColor)
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -125,102 +129,106 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	
 }
 
-// Right mouse button up.
-void CCrisPaintView::OnRButtonUp(UINT nFlags, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
-	CView::OnRButtonUp(nFlags, point);
-}
+#pragma region Device Input 
 
-// Left mouse button up.
-void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
-{
-	CCrisPaintDoc* pdoc = GetDocument();
-	ASSERT_VALID(pdoc);
-	if (!pdoc)
-		return;
-
-	if (pdoc->shapes.size() == 0)
-		return;
-
-	switch (m)
+	// Right mouse button up.
+	void CCrisPaintView::OnRButtonUp(UINT nFlags, CPoint point)
 	{
-	case CCrisPaintView::NOTHING_SELECTED:
-		break;
-	case CCrisPaintView::LINE_SELECTED:
-		EndSetLine(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::CIRCLE_SELECTED:
-		EndSetCircle(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::CURVE_SELECTED:
-		EndSetCurve(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::SQUARE_SELECTED:
-		EndSetSquare(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::TRIANGLE_SELECTED:
-		EndSetTriangle(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::ELIPSE_SELECTED:
-		EndSetElipse(nFlags, point, pdoc);
-		break;
+		ClientToScreen(&point);
+		OnContextMenu(this, point);
+		CView::OnRButtonUp(nFlags, point);
 	}
 
-	ClientToScreen(&point);
-	CView::OnLButtonUp(nFlags, point);
-}
-
-// Left mouse button down.
-void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	CCrisPaintDoc* pdoc = GetDocument();
-	ASSERT_VALID(pdoc);
-	if (!pdoc)
-		return;
-
-	if (m != TRIANGLE_SELECTED)
-		CURRENT_TRIANGLE_VERTEX = 0;
-
-	switch (m)
+	// Left mouse button up.
+	void CCrisPaintView::OnLButtonUp(UINT nFlags, CPoint point)
 	{
-	case CCrisPaintView::NOTHING_SELECTED:
-		break;
-	case CCrisPaintView::LINE_SELECTED:
-		BegingSetLine(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::CIRCLE_SELECTED:
-		BegingSetCircle(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::CURVE_SELECTED:
-		BegingSetCurve(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::SQUARE_SELECTED:
-		BegingSetSquare(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::TRIANGLE_SELECTED:
-		BegingSetTriangle(nFlags, point, pdoc);
-		break;
-	case CCrisPaintView::ELIPSE_SELECTED:
-		BegingSetElipse(nFlags, point, pdoc);
-		break;
+		CCrisPaintDoc* pdoc = GetDocument();
+		ASSERT_VALID(pdoc);
+		if (!pdoc)
+			return;
+
+		if (pdoc->shapes.size() == 0)
+			return;
+
+		switch (m)
+		{
+		case CCrisPaintView::NOTHING_SELECTED:
+			break;
+		case CCrisPaintView::LINE_SELECTED:
+			EndSetLine(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::CIRCLE_SELECTED:
+			EndSetCircle(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::CURVE_SELECTED:
+			EndSetCurve(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::SQUARE_SELECTED:
+			EndSetSquare(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::TRIANGLE_SELECTED:
+			EndSetTriangle(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::ELIPSE_SELECTED:
+			EndSetElipse(nFlags, point, pdoc);
+			break;
+		}
+
+		ClientToScreen(&point);
+		CView::OnLButtonUp(nFlags, point);
 	}
 
-	ClientToScreen(&point);
-	CView::OnLButtonDown(nFlags, point);
-}
+	// Left mouse button down.
+	void CCrisPaintView::OnLButtonDown(UINT nFlags, CPoint point)
+	{
+		CCrisPaintDoc* pdoc = GetDocument();
+		ASSERT_VALID(pdoc);
+		if (!pdoc)
+			return;
 
-// Mouse movement
-void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
-	CString s;
-	s.Format(L"%d, %d", point.x, point.y);
-	pMainFrame->setStatusBar(s);
+		if (m != TRIANGLE_SELECTED)
+			CURRENT_TRIANGLE_VERTEX = 0;
 
-	CView::OnMouseMove(nFlags, point);
-}
+		switch (m)
+		{
+		case CCrisPaintView::NOTHING_SELECTED:
+			break;
+		case CCrisPaintView::LINE_SELECTED:
+			BegingSetLine(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::CIRCLE_SELECTED:
+			BegingSetCircle(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::CURVE_SELECTED:
+			BegingSetCurve(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::SQUARE_SELECTED:
+			BegingSetSquare(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::TRIANGLE_SELECTED:
+			BegingSetTriangle(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::ELIPSE_SELECTED:
+			BegingSetElipse(nFlags, point, pdoc);
+			break;
+		}
+
+		ClientToScreen(&point);
+		CView::OnLButtonDown(nFlags, point);
+	}
+
+	// Mouse movement
+	void CCrisPaintView::OnMouseMove(UINT nFlags, CPoint point)
+	{
+		CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
+		CString s;
+		s.Format(L"%d, %d", point.x, point.y);
+		pMainFrame->setStatusBar(s);
+
+		CView::OnMouseMove(nFlags, point);
+	}
+
+#pragma endregion
 
 void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
@@ -234,7 +242,9 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Line
 	void CCrisPaintView::BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
-		pDoc->shapes.push_back((CShape*)(new CLine(point.x, point.y, point.x, point.y)));
+		CLine* lineAux = new CLine(point.x, point.y, point.x, point.y);
+		lineAux->SetColor(colorDial.GetColor());
+		pDoc->shapes.push_back((CShape*) lineAux);
 	}
 
 	void CCrisPaintView::EndSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
@@ -248,7 +258,9 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Circle
 	void CCrisPaintView::BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
-		pDoc->shapes.push_back((CShape*)new CCircle(point.x, point.y, point.x, point.y));
+		CCircle* circleAux = new CCircle(point.x, point.y, point.x, point.y);
+		circleAux->SetColor(colorDial.GetColor());
+		pDoc->shapes.push_back((CShape*) circleAux);
 	}
 
 	void CCrisPaintView::EndSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
@@ -262,7 +274,9 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing Elipse
 	void CCrisPaintView::BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
-		pDoc->shapes.push_back((CShape*) new CElipse(point.x, point.y, point.x, point.y));
+		CElipse* aux = new CElipse(point.x, point.y, point.x, point.y);
+		aux->SetColor(colorDial.GetColor());
+		pDoc->shapes.push_back((CShape*) aux);
 	}
 
 	void CCrisPaintView::EndSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
@@ -278,7 +292,9 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	{
 		if (CURRENT_TRIANGLE_VERTEX == 0)
 		{
-			pDoc->shapes.push_back((CShape*) new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y));
+			CTriangle* triAux = new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y);
+			triAux->SetColor(colorDial.GetColor());
+			pDoc->shapes.push_back((CShape*) triAux);
 			CURRENT_TRIANGLE_VERTEX++;
 		}
 		else if (CURRENT_TRIANGLE_VERTEX == 1)
@@ -316,7 +332,9 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	// Drawing square
 	void CCrisPaintView::BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
-		pDoc->shapes.push_back((CShape*)new CRectangle(point.x, point.y, point.x, point.y));
+		CRectangle* rect =new CRectangle(point.x, point.y, point.x, point.y);
+		rect->SetColor(colorDial.GetColor());
+		pDoc->shapes.push_back((CShape*)rect);
 	}
 
 	void CCrisPaintView::EndSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
@@ -417,6 +435,12 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 			return;
 	}
 
+	void CCrisPaintView::OnUpdateColor(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(m == COLOR_SELECTED);
+	}
+
 	void CCrisPaintView::OnElipse()
 	{
 		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
@@ -426,6 +450,13 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	{
 		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
 	}
+
+	void CCrisPaintView::OnColor()
+	{
+		m = m == COLOR_SELECTED ? NOTHING_SELECTED : COLOR_SELECTED;
+		colorDial.DoModal();
+	}
+
 #pragma endregion
 
 // CCrisPaintView diagnostics

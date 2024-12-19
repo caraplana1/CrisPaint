@@ -38,7 +38,11 @@ void CLine::render(CDC* pDC)
 
 	newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
 
+
 	oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+	pDC->MoveTo(x0, y0);
+	pDC->LineTo(x1, y1);
 
 	pDC->SelectObject(oldPen);
 }
