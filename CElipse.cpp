@@ -41,8 +41,16 @@ void CElipse::setSecond(int x1, int y1)
 
 void CElipse::render(CDC* pDC)
 {
+	CBrush* oldBrush;
+	CBrush newBrush;
+
+	newBrush.CreateSolidBrush(currentColor.getColor());
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+
 	pDC->MoveTo(0, 0);
 	pDC->Ellipse(x0, y0, x1, y1);
+
+	pDC->SelectObject(oldBrush);
 }
 
 void CElipse::read(CArchive& ar)
@@ -50,5 +58,25 @@ void CElipse::read(CArchive& ar)
 }
 
 void CElipse::write(CArchive& ar)
+{
+}
+
+std::string CElipse::ToString()
+{
+	return std::string();
+}
+
+// Check if a point is inside a shape
+bool CElipse::IsInside(int x, int y)
+{
+	int minX = x0 < x1 ? x0 : x1;
+	int maxX = x0 > x1 ? x0 : x1;
+	int minY = y0 < y1 ? y0 : y1;
+	int maxY = y0 > y1 ? y0 : y1;
+
+	return minX < x && x < maxX && minY < y && y < maxY;
+}
+
+void CElipse::paintShape(float r, float g, float b)
 {
 }

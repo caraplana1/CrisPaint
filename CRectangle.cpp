@@ -32,8 +32,16 @@ void CRectangle::setEndPoint(int x, int y)
 
 void CRectangle::render(CDC* pDC)
 {
+	CBrush* oldBrush;
+	CBrush newBrush;
+
+	newBrush.CreateSolidBrush(currentColor.getColor());
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+
 	pDC->MoveTo(0, 0);
 	pDC->Rectangle(x0, y0, x1, y1);
+
+	pDC->SelectObject(oldBrush);
 }
 
 void CRectangle::read(CArchive& ar)
@@ -41,5 +49,25 @@ void CRectangle::read(CArchive& ar)
 }
 
 void CRectangle::write(CArchive& ar)
+{
+}
+
+std::string CRectangle::ToString()
+{
+	return std::string();
+}
+
+// Check if a point is inside a shape
+bool CRectangle::IsInside(int x, int y)
+{
+	int minX = x0 < x1 ? x0 : x1;
+	int maxX = x0 > x1 ? x0 : x1;
+	int minY = y0 < y1 ? y0 : y1;
+	int maxY = y0 > y1 ? y0 : y1;
+
+	return minX < x && x < maxX && minY < y && y < maxY;
+}
+
+void CRectangle::paintShape(float r, float g, float b)
 {
 }

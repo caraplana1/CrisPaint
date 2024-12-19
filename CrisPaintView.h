@@ -20,11 +20,15 @@ public:
 		ELIPSE_SELECTED,
 		SELECTION_SELECTED,
 		UP_SELECTED,
-		DOWN_SELECTED
+		DOWN_SELECTED,
+		COLOR_SELECTED
 	};
 
 	Primitive_Selection m;
+	CColorDialog colorDial;
 	CCrisPaintDoc* GetDocument() const;
+private:
+	CDC doubleBuffer;
 
 // Operations
 public:
@@ -91,6 +95,7 @@ public:
 	afx_msg void OnUpdateSelect(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateUp(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateDown(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateColor(CCmdUI* pCmdUI);
 
 	afx_msg void OnLine();
 	afx_msg void OnCircle();
@@ -99,6 +104,7 @@ public:
 	afx_msg void OnTriangle();
 	afx_msg void OnElipse();
 	afx_msg void OnSelect();
+	afx_msg void OnColor();
 
 	// Button and mouse handling
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);

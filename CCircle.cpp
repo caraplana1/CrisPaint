@@ -58,25 +58,15 @@ void CCircle::setPointOne(int x1, int y1)
 
 void CCircle::render(CDC* pDC)
 {
-	CPen *old, white;
-	CBrush *oldBrush, bWhite;
-
-	white.CreatePen(PS_SOLID | PS_COSMETIC, 1, RGB(255, 255, 255));
-	bWhite.CreateSolidBrush(RGB(255, 255, 255));
+	CBrush* oldBrush;
+	CBrush newBrush;
+	
+	newBrush.CreateSolidBrush(currentColor.getColor());
+	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
 	pDC->MoveTo(0, 0);
-	pDC->Chord(centerX - r, centerY - r, centerX + r, centerY + r, centerX + r, centerY, centerX - r, centerY);
-	pDC->Chord(centerX - r, centerY - r, centerX + r, centerY + r, centerX - r, centerY, centerX + r, centerY);
+	pDC->Ellipse(centerX - r, centerY - r, centerX + r, centerY + r);
 
-	old = pDC->SelectObject(&white);
-	oldBrush = pDC->SelectObject(&bWhite);
-
-	pDC->MoveTo(centerX - r + 1, centerY);
-	pDC->LineTo(centerX + r - 1, centerY);
-	pDC->MoveTo(centerX - r + 1, centerY-1);
-	pDC->LineTo(centerX + r - 1, centerY-1);
-
-	pDC->SelectObject(old);
 	pDC->SelectObject(oldBrush);
 }
 
@@ -85,5 +75,20 @@ void CCircle::read(CArchive& ar)
 }
 
 void CCircle::write(CArchive& ar)
+{
+}
+
+std::string CCircle::ToString()
+{
+	return std::string();
+}
+
+// Check if a point is inside a shape
+bool CCircle::IsInside(int x, int y)
+{
+	return centerX - r < x && x < centerX + r && centerY - r < y && y < centerY + y;
+}
+
+void CCircle::paintShape(float r, float g, float b)
 {
 }

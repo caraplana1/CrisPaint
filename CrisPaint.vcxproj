@@ -188,6 +188,7 @@
     <ClInclude Include="CElipse.h" />
     <ClInclude Include="CLine.h" />
     <ClInclude Include="CRectangle.h" />
+    <ClInclude Include="CRGB.h" />
     <ClInclude Include="CrisPaint.h" />
     <ClInclude Include="CrisPaintDoc.h" />
     <ClInclude Include="CrisPaintView.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="CElipse.cpp" />
     <ClCompile Include="CLine.cpp" />
     <ClCompile Include="CRectangle.cpp" />
+    <ClCompile Include="CRGB.cpp" />
     <ClCompile Include="CrisPaint.cpp" />
     <ClCompile Include="CrisPaintDoc.cpp" />
     <ClCompile Include="CrisPaintView.cpp" />
