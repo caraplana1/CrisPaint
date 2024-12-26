@@ -24,14 +24,21 @@ public:
 	};
 
 	Primitive_Selection m;
-	bool selectColor = false;
-	bool changingBackgroundColorActive = false;
-	COLORREF backgroundColor = RGB(255, 255, 255);
-	int shapeSelected = -1;
+
+	// Color Dial UI element
 	CColorDialog colorDial;
+
+	// Color Shape Selection
+	bool selectColor = false;
+	CRGB* shapeCurrentColor = new CRGB();
+
+	// Background Color
+	bool changingBackgroundColorActive = false;
+	CRGB* backgroundColor = new CRGB();
+
+	int shapeSelected = -1;
 	CCrisPaintDoc* GetDocument() const;
 private:
-	CDC doubleBuffer;
 
 // Operations
 public:
@@ -101,6 +108,7 @@ public:
 	afx_msg void OnUpdateUp(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateDown(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateColor(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateBackgroundColor(CCmdUI* pCmdUI);
 
 	afx_msg void OnLine();
 	afx_msg void OnCircle();
@@ -110,6 +118,7 @@ public:
 	afx_msg void OnElipse();
 	afx_msg void OnSelect();
 	afx_msg void OnColor();
+	afx_msg void OnBackgroundColor();
 
 	// Button and mouse handling
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);

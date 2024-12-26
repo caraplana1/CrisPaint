@@ -39,6 +39,7 @@ IMPLEMENT_DYNCREATE(CCrisPaintView, CView)
 BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Button and mouse
 	ON_WM_CONTEXTMENU()
+	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
@@ -111,10 +112,6 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	// CDC compatible for the double buffer.
-	if (doubleBuffer == NULL)
-		doubleBuffer.CreateCompatibleDC(pDC);
-
 	// Create an auxiliar ccshape object for render.
 	CShape* aux;
 	int lastPos = pDoc->shapes.size() - 1;
@@ -129,7 +126,8 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	pDC->BitBlt(rect.TopLeft().x, rect.TopLeft().y, rect.BottomRight().x, rect.BottomRight().y, &doubleBuffer, 0, 0, SRCCOPY);
+	// pDC->BitBlt(rect.TopLeft().x, rect.TopLeft().y, rect.BottomRight().x, rect.BottomRight().y, doubleBuffer, 0, 0, SRCCOPY);
+	pDC->SetBkColor(backgroundColor->getColor());
 	
 }
 
@@ -251,7 +249,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CLine* lineAux = new CLine(point.x, point.y, point.x, point.y);
-		lineAux->SetColor(colorDial.GetColor());
+		lineAux->SetColor(shapeCurrentColor->getColor());
 		pDoc->shapes.push_back((CShape*) lineAux);
 	}
 
@@ -267,7 +265,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CCircle* circleAux = new CCircle(point.x, point.y, point.x, point.y);
-		circleAux->SetColor(colorDial.GetColor());
+		circleAux->SetColor(shapeCurrentColor->getColor());
 		pDoc->shapes.push_back((CShape*) circleAux);
 	}
 
@@ -283,7 +281,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CElipse* aux = new CElipse(point.x, point.y, point.x, point.y);
-		aux->SetColor(colorDial.GetColor());
+		aux->SetColor(shapeCurrentColor->getColor());
 		pDoc->shapes.push_back((CShape*) aux);
 	}
 
@@ -301,7 +299,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		if (CURRENT_TRIANGLE_VERTEX == 0)
 		{
 			CTriangle* triAux = new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y);
-			triAux->SetColor(colorDial.GetColor());
+			triAux->SetColor(shapeCurrentColor->getColor());
 			pDoc->shapes.push_back((CShape*) triAux);
 			CURRENT_TRIANGLE_VERTEX++;
 		}
@@ -336,7 +334,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CRectangle* rect =new CRectangle(point.x, point.y, point.x, point.y);
-		rect->SetColor(colorDial.GetColor());
+		rect->SetColor(shapeCurrentColor->getColor());
 		pDoc->shapes.push_back((CShape*)rect);
 	}
 
@@ -476,17 +474,21 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::OnColor()
 	{
 		selectColor = true;
-		colorDial.DoModal();
+
+		if (colorDial.DoModal() == IDOK)
+			shapeCurrentColor = new CRGB(colorDial.GetColor());
+
 		selectColor = false;
+
 	}
 
 	void CCrisPaintView::OnBackgroundColor()
 	{
 		changingBackgroundColorActive = true;
 
-		colorDial.DoModal();
-		backgroundColor = colorDial.GetColor();
-
+		if (colorDial.DoModal() == IDOK)
+			backgroundColor = new CRGB(colorDial.GetColor());
+	
 		changingBackgroundColorActive = false;
 	}
 
