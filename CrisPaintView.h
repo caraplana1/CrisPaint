@@ -25,6 +25,8 @@ public:
 
 	Primitive_Selection m;
 	bool selectColor = false;
+	bool changingBackgroundColorActive = false;
+	COLORREF backgroundColor = RGB(255, 255, 255);
 	int shapeSelected = -1;
 	CColorDialog colorDial;
 	CCrisPaintDoc* GetDocument() const;

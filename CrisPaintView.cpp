@@ -75,6 +75,10 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Select a color
 	ON_UPDATE_COMMAND_UI(ID_COLOR, &CCrisPaintView::OnUpdateColor)
 	ON_COMMAND(ID_COLOR, &CCrisPaintView::OnColor)
+
+	// Select a background color
+	ON_UPDATE_COMMAND_UI(ID_BACKGROUND_COLOR, &CCrisPaintView::OnUpdateBackgroundColor)
+	ON_COMMAND(ID_BACKGROUND_COLOR, &CCrisPaintView::OnBackgroundColor)
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -453,6 +457,12 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		pCmdUI->SetCheck(selectColor);
 	}
 
+	void CCrisPaintView::OnUpdateBackgroundColor(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(changingBackgroundColorActive);
+	}
+
 	void CCrisPaintView::OnElipse()
 	{
 		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
@@ -468,6 +478,16 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		selectColor = true;
 		colorDial.DoModal();
 		selectColor = false;
+	}
+
+	void CCrisPaintView::OnBackgroundColor()
+	{
+		changingBackgroundColorActive = true;
+
+		colorDial.DoModal();
+		backgroundColor = colorDial.GetColor();
+
+		changingBackgroundColorActive = false;
 	}
 
 #pragma endregion
