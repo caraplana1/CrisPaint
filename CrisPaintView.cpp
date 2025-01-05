@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
+	ON_WM_KEYUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONUP()
@@ -73,6 +74,14 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_UPDATE_COMMAND_UI(ID_SELECT, &CCrisPaintView::OnUpdateSelect)
 	ON_COMMAND(ID_SELECT, &CCrisPaintView::OnSelect)
 
+	// Selection Up
+	ON_UPDATE_COMMAND_UI(ID_UP, &CCrisPaintView::OnUpdateUp)
+	ON_COMMAND(ID_UP, &CCrisPaintView::OnUp)
+
+	// Selection Down
+	ON_UPDATE_COMMAND_UI(ID_DOWN, &CCrisPaintView::OnUpdateDown)
+	ON_COMMAND(ID_DOWN, &CCrisPaintView::OnDown)
+
 	// Select a color
 	ON_UPDATE_COMMAND_UI(ID_COLOR, &CCrisPaintView::OnUpdateColor)
 	ON_COMMAND(ID_COLOR, &CCrisPaintView::OnColor)
@@ -84,6 +93,7 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Set fill
 	ON_UPDATE_COMMAND_UI(ID_FILL, &CCrisPaintView::OnUpdateFilled)
 	ON_COMMAND(ID_FILL, &CCrisPaintView::OnFilled)
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -489,6 +499,40 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		m = m == SELECTION_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
 	}
 
+	void CCrisPaintView::OnUp()
+	{
+		if (shapeSelected == -1)
+			return;
+
+		CCrisPaintDoc* doc = GetDocument();
+		std::vector<CShape*> shape = doc->shapes;
+		
+		for (int i = shapeSelected; i < shape.size()-1; i++)
+			std::swap(shape[i], shape[i+1]);
+
+		doc->shapes = shape;
+		Invalidate(1);
+
+		shapeSelected = -1;
+	}
+
+	void CCrisPaintView::OnDown()
+	{
+		if (shapeSelected == -1)
+			return;
+
+		CCrisPaintDoc* doc = GetDocument();
+		std::vector<CShape*> shape = doc->shapes;
+		
+		for (int i = shapeSelected; i > 0; i--)
+			std::swap(shape[i], shape[i-1]);
+
+		doc->shapes = shape;
+		Invalidate(1);
+
+		shapeSelected = -1;
+	}
+
 	void CCrisPaintView::OnColor()
 	{
 		CCrisPaintDoc* doc = GetDocument();
@@ -500,6 +544,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 			if (shapeSelected != -1)
 			{
 				doc->shapes[shapeSelected]->SetColor(shapeCurrentColor->getColor());
+				shapeSelected = -1;
 				Invalidate(1);
 			}
 		}
@@ -525,6 +570,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		if (shapeSelected != -1)
 		{
 			doc->shapes[shapeSelected]->SetFill(isFilled);
+			shapeSelected = -1;
 			Invalidate(1);
 		}
 	}
@@ -553,3 +599,37 @@ CCrisPaintDoc* CCrisPaintView::GetDocument() const // non-debug version is inlin
 
 
 // CCrisPaintView message handlers
+
+
+void CCrisPaintView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+	char c = nChar;
+
+	if (c == 'f' || c == 'F')
+		OnUp();
+	else if (c == 'b' || c == 'B')
+		OnDown();
+	else if (c == 'u' ||c == 'U')
+		shapeSelected = -1;
+	else if (c == 'X')
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		doc->shapes.clear();
+		Invalidate(1);
+	}
+	else if ((nChar == 107 ||nChar == 187) && shapeSelected != -1 && shapeSelected != GetDocument()->shapes.size() - 1 )
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		std::swap(doc->shapes[shapeSelected], doc->shapes[shapeSelected + 1]);
+		Invalidate(1);
+	}
+	else if ((nChar == 109 || nChar == 189) && shapeSelected != -1 && shapeSelected != 0)
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		std::swap(doc->shapes[shapeSelected], doc->shapes[shapeSelected - 1]);
+		Invalidate(1);
+	}
+
+	CView::OnKeyUp(nChar, nRepCnt, nFlags);
+}

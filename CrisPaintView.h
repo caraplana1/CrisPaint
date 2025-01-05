@@ -119,6 +119,8 @@ public:
 	afx_msg void OnTriangle();
 	afx_msg void OnElipse();
 	afx_msg void OnSelect();
+	afx_msg void OnUp();
+	afx_msg void OnDown();
 	afx_msg void OnColor();
 	afx_msg void OnBackgroundColor();
 	afx_msg void OnFilled();
@@ -128,6 +130,8 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // debug version in CrisPaintView.cpp
