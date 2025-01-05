@@ -32,16 +32,35 @@ void CRectangle::setEndPoint(int x, int y)
 
 void CRectangle::render(CDC* pDC)
 {
-	CBrush* oldBrush;
-	CBrush newBrush;
+	if (isFiled)
+	{
+		CBrush* oldBrush;
+		CBrush newBrush;
 
-	newBrush.CreateSolidBrush(currentColor.getColor());
-	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+		newBrush.CreateSolidBrush(currentColor.getColor());
+		oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
-	pDC->MoveTo(0, 0);
-	pDC->Rectangle(x0, y0, x1, y1);
+		pDC->MoveTo(0, 0);
+		pDC->Rectangle(x0, y0, x1, y1);
 
-	pDC->SelectObject(oldBrush);
+		pDC->SelectObject(oldBrush);
+	}
+	else
+	{
+		CPen* oldPen;
+		CPen newPen;
+
+		newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
+		oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+		pDC->MoveTo(x0, y0);
+		pDC->LineTo(x0, y1);
+		pDC->LineTo(x1, y1);
+		pDC->LineTo(x1, y0);
+		pDC->LineTo(x0, y0);
+
+		pDC->SelectObject(oldPen);
+	}
 }
 
 void CRectangle::read(CArchive& ar)

@@ -58,16 +58,32 @@ void CCircle::setPointOne(int x1, int y1)
 
 void CCircle::render(CDC* pDC)
 {
-	CBrush* oldBrush;
-	CBrush newBrush;
-	
-	newBrush.CreateSolidBrush(currentColor.getColor());
-	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+	if (isFiled)
+	{
+		CBrush* oldBrush;
+		CBrush newBrush;
+		
+		newBrush.CreateSolidBrush(currentColor.getColor());
+		oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
-	pDC->MoveTo(0, 0);
-	pDC->Ellipse(centerX - r, centerY - r, centerX + r, centerY + r);
+		pDC->MoveTo(0, 0);
+		pDC->Ellipse(centerX - r, centerY - r, centerX + r, centerY + r);
 
-	pDC->SelectObject(oldBrush);
+		pDC->SelectObject(oldBrush);
+	}
+	else
+	{
+		CPen* oldPen;
+		CPen newPen;
+
+		newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
+		oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+		pDC->Arc(centerX - r, centerY - r, centerX + r, centerY + r, centerX + r, centerY, centerX, centerY + r);
+		pDC->Arc(centerX - r, centerY - r, centerX + r, centerY + r, centerX, centerY + r, centerX + r, centerY);
+
+		pDC->SelectObject(oldPen);
+	}
 }
 
 void CCircle::read(CArchive& ar)

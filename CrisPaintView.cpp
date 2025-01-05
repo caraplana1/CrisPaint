@@ -56,7 +56,7 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Curve Selection
 	ON_UPDATE_COMMAND_UI(ID_CURVE, &CCrisPaintView::OnUpdateCurve)
 	ON_COMMAND(ID_CURVE, &CCrisPaintView::OnCurve)
-	
+
 	// Triangle Selection
 	ON_UPDATE_COMMAND_UI(ID_TRIANGLE, &CCrisPaintView::OnUpdateTriangle)
 	ON_COMMAND(ID_TRIANGLE, &CCrisPaintView::OnTriangle)
@@ -80,6 +80,10 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Select a background color
 	ON_UPDATE_COMMAND_UI(ID_BACKGROUND_COLOR, &CCrisPaintView::OnUpdateBackgroundColor)
 	ON_COMMAND(ID_BACKGROUND_COLOR, &CCrisPaintView::OnBackgroundColor)
+
+	// Set fill
+	ON_UPDATE_COMMAND_UI(ID_FILL, &CCrisPaintView::OnUpdateFilled)
+	ON_COMMAND(ID_FILL, &CCrisPaintView::OnFilled)
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -89,6 +93,7 @@ CCrisPaintView::CCrisPaintView() noexcept
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
 	CURRENT_TRIANGLE_VERTEX = 0;
+	isFilled = true;
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -113,7 +118,7 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		return;
 
 	// Create an auxiliar ccshape object for render.
-	CShape* aux;
+	CShape* aux = NULL;
 	int lastPos = pDoc->shapes.size() - 1;
 
 	for (int i = 0; i <= lastPos; i++)
@@ -266,6 +271,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	{
 		CCircle* circleAux = new CCircle(point.x, point.y, point.x, point.y);
 		circleAux->SetColor(shapeCurrentColor->getColor());
+		circleAux->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*) circleAux);
 	}
 
@@ -282,6 +288,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	{
 		CElipse* aux = new CElipse(point.x, point.y, point.x, point.y);
 		aux->SetColor(shapeCurrentColor->getColor());
+		aux->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*) aux);
 	}
 
@@ -300,6 +307,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		{
 			CTriangle* triAux = new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y);
 			triAux->SetColor(shapeCurrentColor->getColor());
+			triAux->SetFill(isFilled);
 			pDoc->shapes.push_back((CShape*) triAux);
 			CURRENT_TRIANGLE_VERTEX++;
 		}
@@ -335,6 +343,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	{
 		CRectangle* rect =new CRectangle(point.x, point.y, point.x, point.y);
 		rect->SetColor(shapeCurrentColor->getColor());
+		rect->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*)rect);
 	}
 
@@ -353,7 +362,10 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		for (int i = shapes.size() - 1; i >= 0; i--)
 		{
 			if (shapes[i]->IsInside(point.x, point.y))
+			{
+				isFilled = shapes[i]->IsFilled();
 				return i;
+			}
 		}
 
 		return -1;
@@ -461,6 +473,12 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		pCmdUI->SetCheck(changingBackgroundColorActive);
 	}
 
+	void CCrisPaintView::OnUpdateFilled(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(isFilled);
+	}
+
 	void CCrisPaintView::OnElipse()
 	{
 		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : ELIPSE_SELECTED;
@@ -473,10 +491,18 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 	void CCrisPaintView::OnColor()
 	{
+		CCrisPaintDoc* doc = GetDocument();
 		selectColor = true;
 
 		if (colorDial.DoModal() == IDOK)
+		{
 			shapeCurrentColor = new CRGB(colorDial.GetColor());
+			if (shapeSelected != -1)
+			{
+				doc->shapes[shapeSelected]->SetColor(shapeCurrentColor->getColor());
+				Invalidate(1);
+			}
+		}
 
 		selectColor = false;
 
@@ -490,6 +516,17 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 			backgroundColor = new CRGB(colorDial.GetColor());
 	
 		changingBackgroundColorActive = false;
+	}
+
+	void CCrisPaintView::OnFilled()
+	{
+		isFilled = !isFilled;
+		CCrisPaintDoc* doc = GetDocument();
+		if (shapeSelected != -1)
+		{
+			doc->shapes[shapeSelected]->SetFill(isFilled);
+			Invalidate(1);
+		}
 	}
 
 #pragma endregion

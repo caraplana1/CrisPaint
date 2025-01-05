@@ -37,6 +37,7 @@ public:
 	CRGB* backgroundColor = new CRGB();
 
 	int shapeSelected = -1;
+	bool isFilled = true;
 	CCrisPaintDoc* GetDocument() const;
 private:
 
@@ -109,6 +110,7 @@ public:
 	afx_msg void OnUpdateDown(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateColor(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateBackgroundColor(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFilled(CCmdUI* pCmdUI);
 
 	afx_msg void OnLine();
 	afx_msg void OnCircle();
@@ -119,6 +121,7 @@ public:
 	afx_msg void OnSelect();
 	afx_msg void OnColor();
 	afx_msg void OnBackgroundColor();
+	afx_msg void OnFilled();
 
 	// Button and mouse handling
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);

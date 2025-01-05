@@ -40,5 +40,7 @@ public:
 	bool IsReady();
 	void SetColor(int r, int g, int b);
 	void SetColor(COLORREF color);
+	bool IsFilled();
+	void SetFill(bool isFilled);
 };
 

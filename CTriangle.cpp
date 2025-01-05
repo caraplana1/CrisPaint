@@ -61,15 +61,33 @@ void CTriangle::render(CDC* pDC)
 	pts[2].x = x2;
 	pts[2].y = y2;
 
-	CBrush* oldBrush;
-	CBrush newBrush;
+	if (isFiled)
+	{
+		CBrush* oldBrush;
+		CBrush newBrush;
 
-	newBrush.CreateSolidBrush(currentColor.getColor());
-	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+		newBrush.CreateSolidBrush(currentColor.getColor());
+		oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
-	pDC->Polygon(pts, 3);
+		pDC->Polygon(pts, 3);
 
-	pDC->SelectObject(oldBrush);
+		pDC->SelectObject(oldBrush);
+	}
+	else
+	{
+		CPen* oldPen;
+		CPen newPen;
+
+		newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
+		oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+		pDC->MoveTo(pts[0]);
+		pDC->LineTo(pts[1]);
+		pDC->LineTo(pts[2]);
+		pDC->LineTo(pts[0]);
+
+		pDC->SelectObject(oldPen);
+	}
 }
 
 void CTriangle::read(CArchive& ar)
