@@ -47,7 +47,9 @@ void CLine::write(CArchive& ar)
 
 std::string CLine::ToString()
 {
-	return std::string();
+	return 	std::format("LINE {} {} {} {} {} {} {}",
+			x0, y0, x1, y1,
+			(float)currentColor.getRed() / 255, (float)currentColor.getGreen() / 255, (float)currentColor.getBlue() / 255);
 }
 
 // Check if a point is inside a shape

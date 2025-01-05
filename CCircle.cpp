@@ -96,7 +96,15 @@ void CCircle::write(CArchive& ar)
 
 std::string CCircle::ToString()
 {
-	return std::string();
+	if (isFiled)
+		return std::format("FILLED_CIRCLE {} {} {} {} {} {} {} {} {} {}", 
+			x0, y0, x1, y1, 
+			0, 0, 0, 
+			(float)currentColor.getRed()/255, (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
+	else
+		return std::format("CIRCLE {} {} {} {} {} {} {}", 
+			x0, y0, x1, y1, 
+			(float)currentColor.getRed()/255, (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
 }
 
 // Check if a point is inside a shape

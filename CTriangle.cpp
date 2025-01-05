@@ -100,7 +100,15 @@ void CTriangle::write(CArchive& ar)
 
 std::string CTriangle::ToString()
 {
-	return std::string();
+	if (isFiled)
+		return std::format("FILLED_TRIANGLE {} {} {} {} {} {} {} {} {} {} {} {}",
+			x0, y0, x1, y1, x2, y2, 
+			0, 0, 0,
+			(float)currentColor.getRed()/255 , (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
+	else
+		return std::format("TRIANGLE {} {} {} {} {} {} {} {} {}",
+			x0, y0, x1, y1, x2, y2,
+			(float)currentColor.getRed()/255 , (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
 }
 
 // Check if a point is inside a shape
