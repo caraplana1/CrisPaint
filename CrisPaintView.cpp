@@ -612,9 +612,12 @@ void CCrisPaintView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 		OnDown();
 	else if (c == 'u' ||c == 'U')
 		shapeSelected = -1;
-	else if (c == 'X')
+	else if (c == 'X' || c == 'x')
 	{
 		CCrisPaintDoc* doc = GetDocument();
+		for (int i = 0; i < doc->shapes.size(); i++)
+			delete doc->shapes[i];
+
 		doc->shapes.clear();
 		Invalidate(1);
 	}

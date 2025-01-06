@@ -69,6 +69,16 @@ void CRectangle::read(CArchive& ar)
 
 void CRectangle::write(CArchive& ar)
 {
+	ar << type;
+
+	ar << x0;
+	ar << y0;
+	ar << x1;
+	ar << y1;
+
+	ar << currentColor.getRed();
+	ar << currentColor.getGreen();
+	ar << currentColor.getBlue();
 }
 
 std::string CRectangle::ToString()

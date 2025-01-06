@@ -96,6 +96,18 @@ void CTriangle::read(CArchive& ar)
 
 void CTriangle::write(CArchive& ar)
 {
+	ar << type;
+
+	ar << x0;
+	ar << y0;
+	ar << x1;
+	ar << y1;
+	ar << x2;
+	ar << y2;
+
+	ar << currentColor.getRed();
+	ar << currentColor.getGreen();
+	ar << currentColor.getBlue();
 }
 
 std::string CTriangle::ToString()
