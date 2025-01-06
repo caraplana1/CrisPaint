@@ -39,7 +39,9 @@ IMPLEMENT_DYNCREATE(CCrisPaintView, CView)
 BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Button and mouse
 	ON_WM_CONTEXTMENU()
+	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEMOVE()
+	ON_WM_KEYUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONUP()
@@ -55,7 +57,7 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	// Curve Selection
 	ON_UPDATE_COMMAND_UI(ID_CURVE, &CCrisPaintView::OnUpdateCurve)
 	ON_COMMAND(ID_CURVE, &CCrisPaintView::OnCurve)
-	
+
 	// Triangle Selection
 	ON_UPDATE_COMMAND_UI(ID_TRIANGLE, &CCrisPaintView::OnUpdateTriangle)
 	ON_COMMAND(ID_TRIANGLE, &CCrisPaintView::OnTriangle)
@@ -69,12 +71,29 @@ BEGIN_MESSAGE_MAP(CCrisPaintView, CView)
 	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnElipse)
 
 	// Selection Selection
-	ON_UPDATE_COMMAND_UI(ID_ELIPSE, &CCrisPaintView::OnUpdateSelect)
-	ON_COMMAND(ID_ELIPSE, &CCrisPaintView::OnSelect)
+	ON_UPDATE_COMMAND_UI(ID_SELECT, &CCrisPaintView::OnUpdateSelect)
+	ON_COMMAND(ID_SELECT, &CCrisPaintView::OnSelect)
+
+	// Selection Up
+	ON_UPDATE_COMMAND_UI(ID_UP, &CCrisPaintView::OnUpdateUp)
+	ON_COMMAND(ID_UP, &CCrisPaintView::OnUp)
+
+	// Selection Down
+	ON_UPDATE_COMMAND_UI(ID_DOWN, &CCrisPaintView::OnUpdateDown)
+	ON_COMMAND(ID_DOWN, &CCrisPaintView::OnDown)
 
 	// Select a color
 	ON_UPDATE_COMMAND_UI(ID_COLOR, &CCrisPaintView::OnUpdateColor)
 	ON_COMMAND(ID_COLOR, &CCrisPaintView::OnColor)
+
+	// Select a background color
+	ON_UPDATE_COMMAND_UI(ID_BACKGROUND_COLOR, &CCrisPaintView::OnUpdateBackgroundColor)
+	ON_COMMAND(ID_BACKGROUND_COLOR, &CCrisPaintView::OnBackgroundColor)
+
+	// Set fill
+	ON_UPDATE_COMMAND_UI(ID_FILL, &CCrisPaintView::OnUpdateFilled)
+	ON_COMMAND(ID_FILL, &CCrisPaintView::OnFilled)
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 // CCrisPaintView construction/destruction
@@ -84,6 +103,7 @@ CCrisPaintView::CCrisPaintView() noexcept
 	// TODO: add construction code here
 	m = NOTHING_SELECTED;
 	CURRENT_TRIANGLE_VERTEX = 0;
+	isFilled = true;
 }
 
 CCrisPaintView::~CCrisPaintView()
@@ -107,12 +127,8 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	// CDC compatible for the double buffer.
-	if (doubleBuffer == NULL)
-		doubleBuffer.CreateCompatibleDC(pDC);
-
 	// Create an auxiliar ccshape object for render.
-	CShape* aux;
+	CShape* aux = NULL;
 	int lastPos = pDoc->shapes.size() - 1;
 
 	for (int i = 0; i <= lastPos; i++)
@@ -125,7 +141,8 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	pDC->BitBlt(rect.TopLeft().x, rect.TopLeft().y, rect.BottomRight().x, rect.BottomRight().y, &doubleBuffer, 0, 0, SRCCOPY);
+	// pDC->BitBlt(rect.TopLeft().x, rect.TopLeft().y, rect.BottomRight().x, rect.BottomRight().y, doubleBuffer, 0, 0, SRCCOPY);
+	pDC->SetBkColor(backgroundColor->getColor());
 	
 }
 
@@ -166,9 +183,6 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		case CCrisPaintView::SQUARE_SELECTED:
 			EndSetSquare(nFlags, point, pdoc);
 			break;
-		case CCrisPaintView::TRIANGLE_SELECTED:
-			EndSetTriangle(nFlags, point, pdoc);
-			break;
 		case CCrisPaintView::ELIPSE_SELECTED:
 			EndSetElipse(nFlags, point, pdoc);
 			break;
@@ -185,6 +199,9 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 		ASSERT_VALID(pdoc);
 		if (!pdoc)
 			return;
+
+		if (m != SELECTION_SELECTED)
+			shapeSelected = -1;
 
 		if (m != TRIANGLE_SELECTED)
 			CURRENT_TRIANGLE_VERTEX = 0;
@@ -210,6 +227,10 @@ void CCrisPaintView::OnDraw(CDC* pDC)
 			break;
 		case CCrisPaintView::ELIPSE_SELECTED:
 			BegingSetElipse(nFlags, point, pdoc);
+			break;
+		case CCrisPaintView::SELECTION_SELECTED:
+			shapeSelected = StartSelection(nFlags, point, pdoc);
+			m = NOTHING_SELECTED;
 			break;
 		}
 
@@ -243,7 +264,7 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetLine(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CLine* lineAux = new CLine(point.x, point.y, point.x, point.y);
-		lineAux->SetColor(colorDial.GetColor());
+		lineAux->SetColor(shapeCurrentColor->getColor());
 		pDoc->shapes.push_back((CShape*) lineAux);
 	}
 
@@ -259,7 +280,8 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetCircle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CCircle* circleAux = new CCircle(point.x, point.y, point.x, point.y);
-		circleAux->SetColor(colorDial.GetColor());
+		circleAux->SetColor(shapeCurrentColor->getColor());
+		circleAux->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*) circleAux);
 	}
 
@@ -275,7 +297,8 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetElipse(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CElipse* aux = new CElipse(point.x, point.y, point.x, point.y);
-		aux->SetColor(colorDial.GetColor());
+		aux->SetColor(shapeCurrentColor->getColor());
+		aux->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*) aux);
 	}
 
@@ -293,7 +316,8 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		if (CURRENT_TRIANGLE_VERTEX == 0)
 		{
 			CTriangle* triAux = new CTriangle(point.x, point.y, point.x, point.y, point.x, point.y);
-			triAux->SetColor(colorDial.GetColor());
+			triAux->SetColor(shapeCurrentColor->getColor());
+			triAux->SetFill(isFilled);
 			pDoc->shapes.push_back((CShape*) triAux);
 			CURRENT_TRIANGLE_VERTEX++;
 		}
@@ -315,11 +339,6 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		}
 	}
 
-	void CCrisPaintView::EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
-	{
-		// No necesity to implement.
-	}
-
 	// Drawing Curve
 	void CCrisPaintView::BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
@@ -333,7 +352,8 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
 	{
 		CRectangle* rect =new CRectangle(point.x, point.y, point.x, point.y);
-		rect->SetColor(colorDial.GetColor());
+		rect->SetColor(shapeCurrentColor->getColor());
+		rect->SetFill(isFilled);
 		pDoc->shapes.push_back((CShape*)rect);
 	}
 
@@ -343,6 +363,22 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 		CRectangle* square = (CRectangle*)pDoc->shapes[pos];
 		square->setEndPoint(point.x, point.y);
 		Invalidate(1);
+	}
+
+	int CCrisPaintView::StartSelection(UINT nflags, CPoint point, CCrisPaintDoc* pDoc)
+	{
+		std::vector<CShape*> shapes = pDoc->shapes;
+
+		for (int i = shapes.size() - 1; i >= 0; i--)
+		{
+			if (shapes[i]->IsInside(point.x, point.y))
+			{
+				isFilled = shapes[i]->IsFilled();
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 #pragma endregion
@@ -438,7 +474,19 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 	void CCrisPaintView::OnUpdateColor(CCmdUI* pCmdUI)
 	{
 		pCmdUI->Enable(TRUE);
-		pCmdUI->SetCheck(m == COLOR_SELECTED);
+		pCmdUI->SetCheck(selectColor);
+	}
+
+	void CCrisPaintView::OnUpdateBackgroundColor(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(changingBackgroundColorActive);
+	}
+
+	void CCrisPaintView::OnUpdateFilled(CCmdUI* pCmdUI)
+	{
+		pCmdUI->Enable(TRUE);
+		pCmdUI->SetCheck(isFilled);
 	}
 
 	void CCrisPaintView::OnElipse()
@@ -448,13 +496,83 @@ void CCrisPaintView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 
 	void CCrisPaintView::OnSelect()
 	{
-		m = m == ELIPSE_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
+		m = m == SELECTION_SELECTED ? NOTHING_SELECTED : SELECTION_SELECTED;
+	}
+
+	void CCrisPaintView::OnUp()
+	{
+		if (shapeSelected == -1)
+			return;
+
+		CCrisPaintDoc* doc = GetDocument();
+		std::vector<CShape*> shape = doc->shapes;
+		
+		for (int i = shapeSelected; i < shape.size()-1; i++)
+			std::swap(shape[i], shape[i+1]);
+
+		doc->shapes = shape;
+		Invalidate(1);
+
+		shapeSelected = -1;
+	}
+
+	void CCrisPaintView::OnDown()
+	{
+		if (shapeSelected == -1)
+			return;
+
+		CCrisPaintDoc* doc = GetDocument();
+		std::vector<CShape*> shape = doc->shapes;
+		
+		for (int i = shapeSelected; i > 0; i--)
+			std::swap(shape[i], shape[i-1]);
+
+		doc->shapes = shape;
+		Invalidate(1);
+
+		shapeSelected = -1;
 	}
 
 	void CCrisPaintView::OnColor()
 	{
-		m = m == COLOR_SELECTED ? NOTHING_SELECTED : COLOR_SELECTED;
-		colorDial.DoModal();
+		CCrisPaintDoc* doc = GetDocument();
+		selectColor = true;
+
+		if (colorDial.DoModal() == IDOK)
+		{
+			shapeCurrentColor = new CRGB(colorDial.GetColor());
+			if (shapeSelected != -1)
+			{
+				doc->shapes[shapeSelected]->SetColor(shapeCurrentColor->getColor());
+				shapeSelected = -1;
+				Invalidate(1);
+			}
+		}
+
+		selectColor = false;
+
+	}
+
+	void CCrisPaintView::OnBackgroundColor()
+	{
+		changingBackgroundColorActive = true;
+
+		if (colorDial.DoModal() == IDOK)
+			backgroundColor = new CRGB(colorDial.GetColor());
+	
+		changingBackgroundColorActive = false;
+	}
+
+	void CCrisPaintView::OnFilled()
+	{
+		isFilled = !isFilled;
+		CCrisPaintDoc* doc = GetDocument();
+		if (shapeSelected != -1)
+		{
+			doc->shapes[shapeSelected]->SetFill(isFilled);
+			shapeSelected = -1;
+			Invalidate(1);
+		}
 	}
 
 #pragma endregion
@@ -481,3 +599,40 @@ CCrisPaintDoc* CCrisPaintView::GetDocument() const // non-debug version is inlin
 
 
 // CCrisPaintView message handlers
+
+
+void CCrisPaintView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+	char c = nChar;
+
+	if (c == 'f' || c == 'F')
+		OnUp();
+	else if (c == 'b' || c == 'B')
+		OnDown();
+	else if (c == 'u' ||c == 'U')
+		shapeSelected = -1;
+	else if (c == 'X' || c == 'x')
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		for (int i = 0; i < doc->shapes.size(); i++)
+			delete doc->shapes[i];
+
+		doc->shapes.clear();
+		Invalidate(1);
+	}
+	else if ((nChar == 107 ||nChar == 187) && shapeSelected != -1 && shapeSelected != GetDocument()->shapes.size() - 1 )
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		std::swap(doc->shapes[shapeSelected], doc->shapes[shapeSelected + 1]);
+		Invalidate(1);
+	}
+	else if ((nChar == 109 || nChar == 189) && shapeSelected != -1 && shapeSelected != 0)
+	{
+		CCrisPaintDoc* doc = GetDocument();
+		std::swap(doc->shapes[shapeSelected], doc->shapes[shapeSelected - 1]);
+		Invalidate(1);
+	}
+
+	CView::OnKeyUp(nChar, nRepCnt, nFlags);
+}

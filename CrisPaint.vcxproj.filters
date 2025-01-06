@@ -69,6 +69,9 @@
     <ClInclude Include="CRGB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CBackgroung.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CrisPaint.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="CRGB.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackgroung.cpp">
+      <Filter>Source Files\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

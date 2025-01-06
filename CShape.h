@@ -3,6 +3,8 @@
 #include "CRGB.h"
 #include "CShape.h"
 #include <string>
+#include <iostream>
+#include <format>
 #include <vector>
 
 enum PRIMITIVE_ID
@@ -40,5 +42,7 @@ public:
 	bool IsReady();
 	void SetColor(int r, int g, int b);
 	void SetColor(COLORREF color);
+	bool IsFilled();
+	void SetFill(bool isFilled);
 };
 

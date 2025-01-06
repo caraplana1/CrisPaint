@@ -63,3 +63,13 @@ void CShape::SetColor(COLORREF color)
 
     currentColor = *color1;
 }
+
+bool CShape::IsFilled()
+{
+    return isFiled;
+}
+
+void CShape::SetFill(bool isFilled)
+{
+    this->isFiled = isFilled;
+}

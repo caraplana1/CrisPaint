@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "CLine.h"
 
-CRGB* WHITE;
-
 CLine::CLine(int x0, int y0, int x1, int y1)
 {
 	this->x0 = x0;
@@ -12,7 +10,6 @@ CLine::CLine(int x0, int y0, int x1, int y1)
 
 	this->type = LINE;
 	isReady = x0 != x1 || y0 != y1;
-	WHITE = new CRGB(255, 255, 255);
 }
 
 void CLine::setEnd(int x1, int y1)
@@ -26,13 +23,6 @@ void CLine::setEnd(int x1, int y1)
 void CLine::render(CDC* pDC)
 {
 	// If the line is white draw it black
-	if (currentColor == WHITE)
-	{
-		pDC->MoveTo(x0, y0);
-		pDC->LineTo(x1, y1);
-		return;
-	}
-
 	CPen* oldPen;
 	CPen newPen;
 
@@ -53,11 +43,23 @@ void CLine::read(CArchive& ar)
 
 void CLine::write(CArchive& ar)
 {
+	ar << type;
+
+	ar << x0;
+	ar << y0;
+	ar << x1;
+	ar << y1;
+
+	ar << currentColor.getRed();
+	ar << currentColor.getGreen();
+	ar << currentColor.getBlue();
 }
 
 std::string CLine::ToString()
 {
-	return std::string();
+	return 	std::format("LINE {} {} {} {} {} {} {}",
+			x0, y0, x1, y1,
+			(float)currentColor.getRed() / 255, (float)currentColor.getGreen() / 255, (float)currentColor.getBlue() / 255);
 }
 
 // Check if a point is inside a shape

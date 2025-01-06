@@ -61,15 +61,33 @@ void CTriangle::render(CDC* pDC)
 	pts[2].x = x2;
 	pts[2].y = y2;
 
-	CBrush* oldBrush;
-	CBrush newBrush;
+	if (isFiled)
+	{
+		CBrush* oldBrush;
+		CBrush newBrush;
 
-	newBrush.CreateSolidBrush(currentColor.getColor());
-	oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
+		newBrush.CreateSolidBrush(currentColor.getColor());
+		oldBrush = (CBrush*)pDC->SelectObject(&newBrush);
 
-	pDC->Polygon(pts, 3);
+		pDC->Polygon(pts, 3);
 
-	pDC->SelectObject(oldBrush);
+		pDC->SelectObject(oldBrush);
+	}
+	else
+	{
+		CPen* oldPen;
+		CPen newPen;
+
+		newPen.CreatePen(PS_SOLID, 1, currentColor.getColor());
+		oldPen = (CPen*)pDC->SelectObject(&newPen);
+
+		pDC->MoveTo(pts[0]);
+		pDC->LineTo(pts[1]);
+		pDC->LineTo(pts[2]);
+		pDC->LineTo(pts[0]);
+
+		pDC->SelectObject(oldPen);
+	}
 }
 
 void CTriangle::read(CArchive& ar)
@@ -78,11 +96,31 @@ void CTriangle::read(CArchive& ar)
 
 void CTriangle::write(CArchive& ar)
 {
+	ar << type;
+
+	ar << x0;
+	ar << y0;
+	ar << x1;
+	ar << y1;
+	ar << x2;
+	ar << y2;
+
+	ar << currentColor.getRed();
+	ar << currentColor.getGreen();
+	ar << currentColor.getBlue();
 }
 
 std::string CTriangle::ToString()
 {
-	return std::string();
+	if (isFiled)
+		return std::format("FILLED_TRIANGLE {} {} {} {} {} {} {} {} {} {} {} {}",
+			x0, y0, x1, y1, x2, y2, 
+			0, 0, 0,
+			(float)currentColor.getRed()/255 , (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
+	else
+		return std::format("TRIANGLE {} {} {} {} {} {} {} {} {}",
+			x0, y0, x1, y1, x2, y2,
+			(float)currentColor.getRed()/255 , (float)currentColor.getGreen()/255, (float)currentColor.getBlue()/255);
 }
 
 // Check if a point is inside a shape

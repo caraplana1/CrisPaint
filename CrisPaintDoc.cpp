@@ -47,12 +47,13 @@ BOOL CCrisPaintDoc::OnNewDocument()
 
 	// TODO: add reinitialization code here
 	// (SDI documents will reuse this document)
+	for (int i = 0; i < shapes.size(); i++)
+		delete shapes[i];
+
+	shapes.clear();
 
 	return TRUE;
 }
-
-
-
 
 // CCrisPaintDoc serialization
 
@@ -60,7 +61,10 @@ void CCrisPaintDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		ar << (int)shapes.size();
+
+		for (int i = 0; i < shapes.size(); i++)
+			shapes[i]->write(ar);
 	}
 	else
 	{

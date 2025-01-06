@@ -20,15 +20,26 @@ public:
 		ELIPSE_SELECTED,
 		SELECTION_SELECTED,
 		UP_SELECTED,
-		DOWN_SELECTED,
-		COLOR_SELECTED
+		DOWN_SELECTED
 	};
 
 	Primitive_Selection m;
+
+	// Color Dial UI element
 	CColorDialog colorDial;
+
+	// Color Shape Selection
+	bool selectColor = false;
+	CRGB* shapeCurrentColor = new CRGB();
+
+	// Background Color
+	bool changingBackgroundColorActive = false;
+	CRGB* backgroundColor = new CRGB();
+
+	int shapeSelected = -1;
+	bool isFilled = true;
 	CCrisPaintDoc* GetDocument() const;
 private:
-	CDC doubleBuffer;
 
 // Operations
 public:
@@ -50,7 +61,6 @@ public:
 
 	// Triangle
 	void BegingSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
-	void EndSetTriangle(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 	// Curve
 	void BegingSetCurve(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
@@ -59,6 +69,9 @@ public:
 	// Square
 	void BegingSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 	void EndSetSquare(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
+
+	// Selection
+	int StartSelection(UINT nflags, CPoint point, CCrisPaintDoc* pDoc);
 
 // Overrides
 public:
@@ -96,6 +109,8 @@ public:
 	afx_msg void OnUpdateUp(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateDown(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateColor(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateBackgroundColor(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFilled(CCmdUI* pCmdUI);
 
 	afx_msg void OnLine();
 	afx_msg void OnCircle();
@@ -104,13 +119,19 @@ public:
 	afx_msg void OnTriangle();
 	afx_msg void OnElipse();
 	afx_msg void OnSelect();
+	afx_msg void OnUp();
+	afx_msg void OnDown();
 	afx_msg void OnColor();
+	afx_msg void OnBackgroundColor();
+	afx_msg void OnFilled();
 
 	// Button and mouse handling
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnKeyDown(UINT nFlags, CPoint point);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // debug version in CrisPaintView.cpp
